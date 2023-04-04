@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Administrator",
+    "description": "-",
+    "admin": true,
+    "read": true,
+    "write": true,
+    "update": true,
+    "is_active": true
+  },
+  {
+    "title": "All",
+    "description": "-",
+    "admin": false,
+    "read": true,
+    "write": true,
+    "update": true,
+    "is_active": true
+  },
+  {
+    "title": "User",
+    "description": "-",
+    "admin": false,
+    "read": true,
+    "write": false,
+    "update": false,
+    "is_active": true
+  },
+  {
+    "title": "Member",
+    "description": "-",
+    "admin": false,
+    "read": true,
+    "write": false,
+    "update": false,
+    "is_active": true
+  }
+]

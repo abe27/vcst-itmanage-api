@@ -1,0 +1,17 @@
+[
+  {
+    "name": "VCST",
+    "description": "-",
+    "is_active": true
+  },
+  {
+    "name": "BVS",
+    "description": "-",
+    "is_active": true
+  },
+  {
+    "name": "AAA",
+    "description": "-",
+    "is_active": true
+  }
+]
