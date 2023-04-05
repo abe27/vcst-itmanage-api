@@ -9,7 +9,15 @@ import (
 )
 
 var (
-	Store *gorm.DB
+	Store            *gorm.DB
+	StoreAAA         *gorm.DB
+	StoreFormulaAAA  *gorm.DB
+	StoreBVS         *gorm.DB
+	StoreFormulaBVS  *gorm.DB
+	StoreVCS         *gorm.DB
+	StoreFormulaVCS  *gorm.DB
+	StoreVCST        *gorm.DB
+	StoreFormulaVCST *gorm.DB
 )
 
 func InitDB() {

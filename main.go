@@ -14,6 +14,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
@@ -50,6 +51,52 @@ func init() {
 	}
 	configs.InitDB()
 	configs.Seed()
+
+	/// Setup database Master
+	dnsAAA := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_AAA_USERNAME"), os.Getenv("MSSQL_AAA_PASSWORD"), os.Getenv("MSSQL_AAA_HOST"), os.Getenv("MSSQL_AAA_PORT"), os.Getenv("MSSQL_AAA_DBNAME"))
+	dnsFormulaAAA := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_AAA_USERNAME"), os.Getenv("MSSQL_AAA_PASSWORD"), os.Getenv("MSSQL_AAA_HOST"), os.Getenv("MSSQL_AAA_PORT"), os.Getenv("MSSQL_AAA_FORMULA"))
+	dnsBVS := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_BVS_USERNAME"), os.Getenv("MSSQL_BVS_PASSWORD"), os.Getenv("MSSQL_BVS_HOST"), os.Getenv("MSSQL_BVS_PORT"), os.Getenv("MSSQL_BVS_DBNAME"))
+	dnsFormulaBVS := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_BVS_USERNAME"), os.Getenv("MSSQL_BVS_PASSWORD"), os.Getenv("MSSQL_BVS_HOST"), os.Getenv("MSSQL_BVS_PORT"), os.Getenv("MSSQL_BVS_FORMULA"))
+	dnsVCS := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_VCS_USERNAME"), os.Getenv("MSSQL_VCS_PASSWORD"), os.Getenv("MSSQL_VCS_HOST"), os.Getenv("MSSQL_VCS_PORT"), os.Getenv("MSSQL_VCS_DBNAME"))
+	dnsFormulaVCS := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_VCS_USERNAME"), os.Getenv("MSSQL_VCS_PASSWORD"), os.Getenv("MSSQL_VCS_HOST"), os.Getenv("MSSQL_VCS_PORT"), os.Getenv("MSSQL_VCS_FORMULA"))
+	dnsVCST := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_VCST_USERNAME"), os.Getenv("MSSQL_VCST_PASSWORD"), os.Getenv("MSSQL_VCST_HOST"), os.Getenv("MSSQL_VCST_PORT"), os.Getenv("MSSQL_VCST_DBNAME"))
+	dnsFormulaVCST := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_VCST_USERNAME"), os.Getenv("MSSQL_VCST_PASSWORD"), os.Getenv("MSSQL_VCST_HOST"), os.Getenv("MSSQL_VCST_PORT"), os.Getenv("MSSQL_VCST_FORMULA"))
+
+	configs.StoreAAA, err = gorm.Open(sqlserver.Open(dnsAAA), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	configs.StoreFormulaAAA, err = gorm.Open(sqlserver.Open(dnsFormulaAAA), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+
+	configs.StoreBVS, err = gorm.Open(sqlserver.Open(dnsBVS), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	configs.StoreFormulaBVS, err = gorm.Open(sqlserver.Open(dnsFormulaBVS), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+
+	configs.StoreVCS, err = gorm.Open(sqlserver.Open(dnsVCS), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	configs.StoreFormulaVCS, err = gorm.Open(sqlserver.Open(dnsFormulaVCS), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+
+	configs.StoreVCST, err = gorm.Open(sqlserver.Open(dnsVCST), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	configs.StoreFormulaVCST, err = gorm.Open(sqlserver.Open(dnsFormulaVCST), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect to database")
+	}
 }
 
 func main() {
