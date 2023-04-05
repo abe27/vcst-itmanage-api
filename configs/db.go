@@ -5,6 +5,7 @@ import (
 
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
@@ -65,6 +66,26 @@ func InitDB() {
 	if !Store.Migrator().HasTable(&models.ActivityLogging{}) {
 		Store.AutoMigrate(&models.ActivityLogging{})
 	}
+}
+
+func WHSDb(c *fiber.Ctx) *gorm.DB {
+	whs := "VCST"
+	if c.Query("whs") != "" {
+		whs = c.Query("whs")
+	}
+
+	var db *gorm.DB
+	switch whs {
+	case "BVS":
+		db = StoreFormulaBVS
+	case "VCS":
+		db = StoreFormulaVCS
+	case "AAA":
+		db = StoreFormulaAAA
+	default:
+		db = StoreFormulaVCST
+	}
+	return db
 }
 
 func Seed() {

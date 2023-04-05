@@ -5,31 +5,10 @@ import (
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
-func checkWHS(c *fiber.Ctx) *gorm.DB {
-	whs := "VCST"
-	if c.Query("whs") != "" {
-		whs = c.Query("whs")
-	}
-
-	var db *gorm.DB
-	switch whs {
-	case "BVS":
-		db = configs.StoreFormulaBVS
-	case "VCS":
-		db = configs.StoreFormulaVCS
-	case "AAA":
-		db = configs.StoreFormulaAAA
-	default:
-		db = configs.StoreFormulaVCST
-	}
-	return db
-}
-
 func ProductGetController(c *fiber.Ctx) error {
-	db := checkWHS(c)
+	db := configs.WHSDb(c)
 	var r models.Response
 	prodType := "4"
 	if c.Query("type") != "" {
@@ -38,7 +17,7 @@ func ProductGetController(c *fiber.Ctx) error {
 
 	if c.Query("id") != "" {
 		var prod models.Product
-		if err := db.Scopes(services.Paginate(c)).Preload("ProductType").First(&prod, &models.Product{FCSKID: c.Query("id"), FCTYPE: prodType}).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Preload("Unit").First(&prod, &models.Product{FCSKID: c.Query("id"), FCTYPE: prodType}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -49,7 +28,7 @@ func ProductGetController(c *fiber.Ctx) error {
 	}
 
 	var prod []models.Product
-	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Find(&prod, &models.Product{FCTYPE: prodType}).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Preload("Unit").Find(&prod, &models.Product{FCTYPE: prodType}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
@@ -96,7 +75,7 @@ func ProductPutController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(r)
 	}
 
-	db := checkWHS(c)
+	db := configs.WHSDb(c)
 	var prod models.Product
 	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
@@ -117,7 +96,7 @@ func ProductPutController(c *fiber.Ctx) error {
 	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
 	// }
 
-	r.Message = "Create successfully"
+	r.Message = "Update successfully"
 	r.Data = &prod
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
@@ -130,7 +109,7 @@ func ProductDeleteController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(r)
 	}
 
-	db := checkWHS(c)
+	db := configs.WHSDb(c)
 	var prod models.Product
 	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
@@ -142,7 +121,7 @@ func ProductDeleteController(c *fiber.Ctx) error {
 	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
 	// }
 
-	r.Message = "Create successfully"
+	r.Message = "Delete successfully"
 	r.Data = &prod
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
