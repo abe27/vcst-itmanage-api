@@ -1,0 +1,42 @@
+[
+  {
+    "name": "AAA",
+    "description": "-",
+    "ip_address": "192.168.10.6",
+    "on_port": "1433",
+    "user": "fm1234",
+    "passord": "x2y2",
+    "db_name": "AAA",
+    "is_active": true
+  },
+  {
+    "name": "BVS",
+    "description": "-",
+    "ip_address": "192.168.1.191",
+    "on_port": "1433",
+    "user": "fm1234",
+    "passord": "x2y2",
+    "db_name": "BVS",
+    "is_active": true
+  },
+  {
+    "name": "VCS",
+    "description": "-",
+    "ip_address": "192.168.5.12",
+    "on_port": "1433",
+    "user": "fm1234",
+    "passord": "x2y2",
+    "db_name": "VCS",
+    "is_active": true
+  },
+  {
+    "name": "VCST",
+    "description": "-",
+    "ip_address": "192.168.20.9",
+    "on_port": "1433",
+    "user": "fm1234",
+    "passord": "x2y2",
+    "db_name": "VCST",
+    "is_active": true
+  }
+]

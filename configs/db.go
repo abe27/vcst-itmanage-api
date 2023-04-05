@@ -22,6 +22,10 @@ var (
 
 func InitDB() {
 	// fmt.Println("Initializing database!")
+	if !Store.Migrator().HasTable(&models.Whs{}) {
+		Store.AutoMigrate(&models.Whs{})
+	}
+
 	if !Store.Migrator().HasTable(&models.Company{}) {
 		Store.AutoMigrate(&models.Company{})
 	}
@@ -78,5 +82,13 @@ func Seed() {
 
 	for _, p := range company {
 		Store.FirstOrCreate(&p, &models.Company{Name: p.Name})
+	}
+
+	data, _ = services.ReadJson("public/mock/whs.json")
+	var whs []models.Whs
+	json.Unmarshal(data, &whs)
+
+	for _, p := range whs {
+		Store.FirstOrCreate(&p, &models.Whs{Name: p.Name})
 	}
 }

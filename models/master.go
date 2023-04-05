@@ -7,6 +7,26 @@ import (
 	"gorm.io/gorm"
 )
 
+type Whs struct {
+	ID          string    `gorm:"primaryKey;size:21;" json:"id"`
+	Name        string    `gorm:"not null;index;unique;size:50" json:"name"`
+	Description string    `json:"description" form:"description"`
+	IpAddress   string    `gorm:"size:15;" json:"ip_address"`
+	OnPort      string    `gorm:"size:4;" json:"on_port"`
+	User        string    `gorm:"size:50;" json:"user"`
+	Passord     string    `gorm:"size:50;" json:"passord"`
+	DBName      string    `gorm:"size:50;" json:"db_name"`
+	IsActive    bool      `gorm:"null" json:"is_active" form:"is_active" default:"false"`
+	CreatedAt   time.Time `json:"created_at" default:"now"`
+	UpdatedAt   time.Time `json:"updated_at" default:"now"`
+}
+
+func (obj *Whs) BeforeCreate(tx *gorm.DB) (err error) {
+	id, _ := g.New()
+	obj.ID = id
+	return
+}
+
 type Company struct {
 	ID          string    `gorm:"primaryKey;size:21;" json:"id"`
 	Name        string    `gorm:"not null;index;unique;size:50" json:"name"`

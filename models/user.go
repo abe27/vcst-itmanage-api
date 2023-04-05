@@ -20,6 +20,7 @@ type User struct {
 	SectionID    *string     `json:"section_id"`
 	DepartmentID *string     `json:"department_id"`
 	PermissionID *string     `json:"permision_id"`
+	WhsID        *string     `json:"whs_id"`
 	IsActive     bool        `gorm:"null" json:"is_active" form:"is_active" default:"false"`
 	CreatedAt    time.Time   `json:"created_at" default:"now"`
 	UpdatedAt    time.Time   `json:"updated_at" default:"now"`
@@ -28,6 +29,7 @@ type User struct {
 	Section      *Section    `gorm:"foreignKey:SectionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"section"`
 	Department   *Department `gorm:"foreignKey:DepartmentID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"department"`
 	Permission   *Permission `gorm:"foreignKey:PermissionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"permission"`
+	Whs          *Whs        `gorm:"foreignKey:WhsID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"whs"`
 }
 
 func (obj *User) BeforeCreate(tx *gorm.DB) (err error) {

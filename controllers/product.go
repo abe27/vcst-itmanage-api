@@ -1,0 +1,148 @@
+package controllers
+
+import (
+	"github.com/abe27/vcst/api.v1/configs"
+	"github.com/abe27/vcst/api.v1/models"
+	"github.com/abe27/vcst/api.v1/services"
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+)
+
+func checkWHS(c *fiber.Ctx) *gorm.DB {
+	whs := "VCST"
+	if c.Query("whs") != "" {
+		whs = c.Query("whs")
+	}
+
+	var db *gorm.DB
+	switch whs {
+	case "BVS":
+		db = configs.StoreFormulaBVS
+	case "VCS":
+		db = configs.StoreFormulaVCS
+	case "AAA":
+		db = configs.StoreFormulaAAA
+	default:
+		db = configs.StoreFormulaVCST
+	}
+	return db
+}
+
+func ProductGetController(c *fiber.Ctx) error {
+	db := checkWHS(c)
+	var r models.Response
+	prodType := "4"
+	if c.Query("type") != "" {
+		prodType = c.Query("type")
+	}
+
+	if c.Query("id") != "" {
+		var prod models.Product
+		if err := db.Scopes(services.Paginate(c)).Preload("ProductType").First(&prod, &models.Product{FCSKID: c.Query("id"), FCTYPE: prodType}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(r)
+		}
+
+		r.Message = "ok"
+		r.Data = &prod
+		return c.Status(fiber.StatusOK).JSON(r)
+	}
+
+	var prod []models.Product
+	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Find(&prod, &models.Product{FCTYPE: prodType}).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(r)
+	}
+
+	r.Message = "ok"
+	r.Data = &prod
+	return c.Status(fiber.StatusOK).JSON(r)
+}
+
+func ProductPostController(c *fiber.Ctx) error {
+	var r models.Response
+	var frm models.Product
+	if err := c.BodyParser(&frm); err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(r)
+	}
+
+	// db := checkWHS(c)
+	var prod models.Product
+	prod.FCTYPE = frm.FCTYPE
+	prod.FCCODE = frm.FCCODE
+	prod.FCSNAME = frm.FCSNAME
+	prod.FCSNAME2 = frm.FCSNAME2
+	prod.FCNAME = frm.FCNAME
+	prod.FCNAME2 = frm.FCNAME2
+	prod.FNAVGCOST = frm.FNAVGCOST
+	prod.FNSTDCOST = frm.FNSTDCOST
+	prod.FCSTATUS = frm.FCSTATUS
+	// if err := db.Create(&prod).Error; err != nil {
+	// 	r.Message = err.Error()
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
+	// }
+
+	r.Message = "Create successfully"
+	r.Data = &prod
+	return c.Status(fiber.StatusCreated).JSON(&r)
+}
+
+func ProductPutController(c *fiber.Ctx) error {
+	var r models.Response
+	var frm models.Product
+	if err := c.BodyParser(&frm); err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(r)
+	}
+
+	db := checkWHS(c)
+	var prod models.Product
+	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusNotFound).JSON(r)
+	}
+
+	prod.FCTYPE = frm.FCTYPE
+	prod.FCCODE = frm.FCCODE
+	prod.FCSNAME = frm.FCSNAME
+	prod.FCSNAME2 = frm.FCSNAME2
+	prod.FCNAME = frm.FCNAME
+	prod.FCNAME2 = frm.FCNAME2
+	prod.FNAVGCOST = frm.FNAVGCOST
+	prod.FNSTDCOST = frm.FNSTDCOST
+	prod.FCSTATUS = frm.FCSTATUS
+	// if err := db.Save(&prod).Error; err != nil {
+	// 	r.Message = err.Error()
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
+	// }
+
+	r.Message = "Create successfully"
+	r.Data = &prod
+	return c.Status(fiber.StatusOK).JSON(&r)
+}
+
+func ProductDeleteController(c *fiber.Ctx) error {
+	var r models.Response
+	var frm models.Product
+	if err := c.BodyParser(&frm); err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(r)
+	}
+
+	db := checkWHS(c)
+	var prod models.Product
+	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusNotFound).JSON(r)
+	}
+
+	// if err := db.Delete(&prod).Error; err != nil {
+	// 	r.Message = err.Error()
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
+	// }
+
+	r.Message = "Create successfully"
+	r.Data = &prod
+	return c.Status(fiber.StatusOK).JSON(&r)
+}
