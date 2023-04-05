@@ -64,38 +64,38 @@ func init() {
 
 	configs.StoreAAA, err = gorm.Open(sqlserver.Open(dnsAAA), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreAAA database")
 	}
 	configs.StoreFormulaAAA, err = gorm.Open(sqlserver.Open(dnsFormulaAAA), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreFormulaAAA database")
 	}
 
 	configs.StoreBVS, err = gorm.Open(sqlserver.Open(dnsBVS), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreBVS database")
 	}
 	configs.StoreFormulaBVS, err = gorm.Open(sqlserver.Open(dnsFormulaBVS), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreFormulaBVS database")
 	}
 
 	configs.StoreVCS, err = gorm.Open(sqlserver.Open(dnsVCS), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreVCS database")
 	}
 	configs.StoreFormulaVCS, err = gorm.Open(sqlserver.Open(dnsFormulaVCS), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreFormulaVCS database")
 	}
 
 	configs.StoreVCST, err = gorm.Open(sqlserver.Open(dnsVCST), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreVCST database")
 	}
 	configs.StoreFormulaVCST, err = gorm.Open(sqlserver.Open(dnsFormulaVCST), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database")
+		panic("Failed to connect to StoreFormulaVCST database")
 	}
 }
 
