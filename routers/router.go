@@ -2,6 +2,7 @@ package routers
 
 import (
 	c "github.com/abe27/vcst/api.v1/controllers"
+	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -13,39 +14,42 @@ func SetupRouter(r *fiber.App) {
 
 	// Register
 	api.Post("/register", c.RegisterController)
+	api.Post("/login", c.LoginController)
+	auth := api.Use(services.AuthorizationRequired)
+	auth.Get("/verify", c.VerifyToken)
 
-	whs := api.Group("/whs")
+	whs := auth.Group("/whs")
 	whs.Get("", c.WhsGetController)
 	whs.Post("", c.WhsPostController)
 	whs.Put("/:id", c.WhsPutController)
 	whs.Delete("/:id", c.WhsDeleteController)
 
 	// Route product
-	prod := api.Group("/product")
+	prod := auth.Group("/product")
 	prod.Get("", c.ProductGetController)
 	prod.Post("", c.ProductPostController)
 	prod.Put("/:id", c.ProductPutController)
 	prod.Delete("/:id", c.ProductDeleteController)
 
-	prodType := api.Group("/productType")
+	prodType := auth.Group("/productType")
 	prodType.Get("", c.ProductTypeGetController)
 	prodType.Post("", c.ProductTypePostController)
 	prodType.Put("/:id", c.ProductTypePutController)
 	prodType.Delete("/:id", c.ProductTypeDeleteController)
 
-	prodUnit := api.Group("/unit")
+	prodUnit := auth.Group("/unit")
 	prodUnit.Get("", c.UnitGetController)
 	prodUnit.Post("", c.UnitPostController)
 	prodUnit.Put("/:id", c.UnitPutController)
 	prodUnit.Delete("/:id", c.UnitDeleteController)
 
-	stockWhs := api.Group("/whouse")
+	stockWhs := auth.Group("/whouse")
 	stockWhs.Get("", c.WHouseGetController)
 	stockWhs.Post("", c.WHousePostController)
 	stockWhs.Put("/:id", c.WHousePutController)
 	stockWhs.Delete("/:id", c.WHouseDeleteController)
 
-	prodStock := api.Group("/stock")
+	prodStock := auth.Group("/stock")
 	prodStock.Get("", c.StockGetController)
 	prodStock.Post("", c.StockPostController)
 	prodStock.Put("/:id", c.StockPutController)
