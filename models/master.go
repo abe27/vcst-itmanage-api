@@ -107,14 +107,14 @@ func (obj *Permission) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type ErpUser struct {
-	ID        string    `gorm:"primaryKey;size:21;" json:"id"`
-	UserName  string    `json:"user_name"`
-	Password  string    `json:"password"`
-	SectionID string    `json:"section_id"`
-	IsActive  bool      `gorm:"null" json:"is_active" default:"false"`
-	CreatedAt time.Time `json:"created_at" default:"now"`
-	UpdatedAt time.Time `json:"updated_at" default:"now"`
-	Section   *Section  `gorm:"foreignKey:SectionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"section"`
+	ID           string      `gorm:"primaryKey;size:21;" json:"id"`
+	UserName     string      `json:"username"`
+	Password     string      `json:"password"`
+	DepartmentID string      `json:"department_id"`
+	IsActive     bool        `gorm:"null" json:"is_active" default:"false"`
+	CreatedAt    time.Time   `json:"created_at" default:"now"`
+	UpdatedAt    time.Time   `json:"updated_at" default:"now"`
+	Department   *Department `gorm:"foreignKey:DepartmentID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"department"`
 }
 
 func (obj *ErpUser) BeforeCreate(tx *gorm.DB) (err error) {

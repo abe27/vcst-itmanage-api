@@ -24,6 +24,36 @@ func SetupRouter(r *fiber.App) {
 	whs.Put("/:id", c.WhsPutController)
 	whs.Delete("/:id", c.WhsDeleteController)
 
+	company := auth.Group("/company")
+	company.Get("", c.CompanyGetController)
+	company.Post("", c.CompanyPostController)
+	company.Put("/:id", c.CompanyPutController)
+	company.Delete("/:id", c.CompanyDeleteController)
+
+	position := auth.Group("/position")
+	position.Get("", c.PositionGetController)
+	position.Post("", c.PositionPostController)
+	position.Put("/:id", c.PositionPutController)
+	position.Delete("/:id", c.PositionDeleteController)
+
+	department := auth.Group("/department")
+	department.Get("", c.DepartmentGetController)
+	department.Post("", c.DepartmentPostController)
+	department.Put("/:id", c.DepartmentPutController)
+	department.Delete("/:id", c.DepartmentDeleteController)
+
+	section := auth.Group("/section")
+	section.Get("", c.SectionGetController)
+	section.Post("", c.SectionPostController)
+	section.Put("/:id", c.SectionPutController)
+	section.Delete("/:id", c.SectionDeleteController)
+
+	erpUser := auth.Group("/erpUser")
+	erpUser.Get("", c.ErpUserGetController)
+	erpUser.Post("", c.ErpUserPostController)
+	erpUser.Put("/:id", c.ErpUserPutController)
+	erpUser.Delete("/:id", c.ErpUserDeleteController)
+
 	// Route product
 	prod := auth.Group("/product")
 	prod.Get("", c.ProductGetController)
