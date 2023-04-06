@@ -32,7 +32,5 @@ func WHSDb(c *fiber.Ctx) *gorm.DB {
 	default:
 		db = configs.StoreFormulaVCST
 	}
-
-	fmt.Println(whs)
 	return db
 }
