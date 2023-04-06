@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/abe27/vcst/api.v1/configs"
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
@@ -9,7 +8,7 @@ import (
 
 func UnitGetController(c *fiber.Ctx) error {
 	var r models.Response
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	if c.Query("id") != "" {
 		var unit models.Unit
 		if err := db.Scopes(services.Paginate(c)).First(&unit, &models.Unit{ID: c.Query("id")}).Error; err != nil {
@@ -41,7 +40,7 @@ func UnitPostController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(r)
 	}
 
-	// db := configs.WHSDb(c)
+	// db := WHSDb(c)
 	var Unit models.Unit
 	Unit.FCCODE = frm.FCCODE
 	Unit.FCNAME = frm.FCNAME
@@ -65,7 +64,7 @@ func UnitPutController(c *fiber.Ctx) error {
 	}
 
 	var Unit models.Unit
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	if err := db.First(&Unit, &models.Unit{ID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
@@ -86,7 +85,7 @@ func UnitPutController(c *fiber.Ctx) error {
 func UnitDeleteController(c *fiber.Ctx) error {
 	var r models.Response
 	var unit models.Unit
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	if err := db.First(&unit, &models.Unit{ID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)

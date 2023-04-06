@@ -1,0 +1,42 @@
+[
+  {
+    "title": "ITC",
+    "description": "IT Center",
+    "is_active": true
+  },
+  {
+    "title": "HR",
+    "description": "Human Resources",
+    "is_active": true
+  },
+  {
+    "title": "AC",
+    "description": "Accounting",
+    "is_active": true
+  },
+  {
+    "title": "ENG",
+    "description": "Engineering",
+    "is_active": true
+  },
+  {
+    "title": "REC",
+    "description": "Receive",
+    "is_active": true
+  },
+  {
+    "title": "QA",
+    "description": "Quality Assurance",
+    "is_active": true
+  },
+  {
+    "title": "QC",
+    "description": "Quality Control",
+    "is_active": true
+  },
+  {
+    "title": "Operation",
+    "description": "Operation",
+    "is_active": true
+  }
+]

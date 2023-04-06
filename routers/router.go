@@ -9,6 +9,16 @@ func SetupRouter(r *fiber.App) {
 	r.Get("/", c.HelloController)
 
 	api := r.Group("/api/v1")
+	api.Get("", c.HelloController)
+
+	// Register
+	api.Post("/register", c.RegisterController)
+
+	whs := api.Group("/whs")
+	whs.Get("", c.WhsGetController)
+	whs.Post("", c.WhsPostController)
+	whs.Put("/:id", c.WhsPutController)
+	whs.Delete("/:id", c.WhsDeleteController)
 
 	// Route product
 	prod := api.Group("/product")
@@ -35,9 +45,9 @@ func SetupRouter(r *fiber.App) {
 	stockWhs.Put("/:id", c.WHousePutController)
 	stockWhs.Delete("/:id", c.WHouseDeleteController)
 
-	// prodVCST := api.Group("/product/vcst")
-	// prodVCST.Get("", c.ProductGetVCSTController)
-	// prodVCST.Post("", c.ProductPostVCSTController)
-	// prodVCST.Put("/:id", c.ProductPutVCSTController)
-	// prodVCST.Delete("/:id", c.ProductDeleteVCSTController)
+	prodStock := api.Group("/stock")
+	prodStock.Get("", c.StockGetController)
+	prodStock.Post("", c.StockPostController)
+	prodStock.Put("/:id", c.StockPutController)
+	prodStock.Delete("/:id", c.StockDeleteController)
 }

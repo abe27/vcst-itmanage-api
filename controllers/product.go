@@ -1,14 +1,13 @@
 package controllers
 
 import (
-	"github.com/abe27/vcst/api.v1/configs"
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
 )
 
 func ProductGetController(c *fiber.Ctx) error {
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	var r models.Response
 	prodType := "4"
 	if c.Query("type") != "" {
@@ -75,7 +74,7 @@ func ProductPutController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(r)
 	}
 
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	var prod models.Product
 	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
@@ -109,7 +108,7 @@ func ProductDeleteController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(r)
 	}
 
-	db := configs.WHSDb(c)
+	db := WHSDb(c)
 	var prod models.Product
 	if err := db.First(&prod, &models.Product{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()

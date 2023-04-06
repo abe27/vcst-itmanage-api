@@ -5,7 +5,6 @@ import (
 
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
-	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
@@ -68,26 +67,6 @@ func InitDB() {
 	}
 }
 
-func WHSDb(c *fiber.Ctx) *gorm.DB {
-	whs := "VCST"
-	if c.Query("whs") != "" {
-		whs = c.Query("whs")
-	}
-
-	var db *gorm.DB
-	switch whs {
-	case "BVS":
-		db = StoreFormulaBVS
-	case "VCS":
-		db = StoreFormulaVCS
-	case "AAA":
-		db = StoreFormulaAAA
-	default:
-		db = StoreFormulaVCST
-	}
-	return db
-}
-
 func Seed() {
 	data, _ := services.ReadJson("public/mock/permission.json")
 	var perms []models.Permission
@@ -111,5 +90,29 @@ func Seed() {
 
 	for _, p := range whs {
 		Store.FirstOrCreate(&p, &models.Whs{Name: p.Name})
+	}
+
+	data, _ = services.ReadJson("public/mock/position.json")
+	var position []models.Position
+	json.Unmarshal(data, &position)
+
+	for _, p := range position {
+		Store.FirstOrCreate(&p, &models.Position{Title: p.Title})
+	}
+
+	data, _ = services.ReadJson("public/mock/depart.json")
+	var department []models.Department
+	json.Unmarshal(data, &department)
+
+	for _, p := range department {
+		Store.FirstOrCreate(&p, &models.Department{Title: p.Title})
+	}
+
+	data, _ = services.ReadJson("public/mock/section.json")
+	var section []models.Section
+	json.Unmarshal(data, &section)
+
+	for _, p := range section {
+		Store.FirstOrCreate(&p, &models.Section{Title: p.Title})
 	}
 }

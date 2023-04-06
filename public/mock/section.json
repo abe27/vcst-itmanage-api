@@ -1,21 +1,16 @@
 [
   {
-    "name": "VCST",
+    "title": "-",
     "description": "-",
     "is_active": true
   },
   {
-    "name": "VCST",
+    "title": "Officer",
     "description": "-",
     "is_active": true
   },
   {
-    "name": "BVS",
-    "description": "-",
-    "is_active": true
-  },
-  {
-    "name": "AAA",
+    "title": "Worker",
     "description": "-",
     "is_active": true
   }
