@@ -54,6 +54,13 @@ func SetupRouter(r *fiber.App) {
 	erpUser.Put("/:id", c.ErpUserPutController)
 	erpUser.Delete("/:id", c.ErpUserDeleteController)
 
+	billing := auth.Group("/billing")
+	document := billing.Group("/document")
+	document.Get("", c.DocumentGetController)
+	document.Post("", c.DocumentPostController)
+	document.Put("/:id", c.DocumentPutController)
+	document.Delete("/:id", c.DocumentDeleteController)
+
 	// Route product
 	prod := auth.Group("/product")
 	prod.Get("", c.ProductGetController)

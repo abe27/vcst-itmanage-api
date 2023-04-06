@@ -1,42 +1,42 @@
 [
-  {
-    "title": "CEO",
-    "description": "-",
-    "is_active": true
-  },
-  {
-    "title": "GM",
-    "description": "General Manager",
-    "is_active": true
-  },
-  {
-    "title": "Manager",
-    "description": "Manager",
-    "is_active": true
-  },
-  {
-    "title": "Ast",
-    "description": "Assistant Manager",
-    "is_active": true
-  },
-  {
-    "title": "Sup.",
-    "description": "supervisor",
-    "is_active": true
-  },
-  {
-    "title": "Leader",
-    "description": "Leader",
-    "is_active": true
-  },
-  {
-    "title": "Staff",
-    "description": "-",
-    "is_active": true
-  },
-  {
-    "title": "Operator",
-    "description": "-",
-    "is_active": true
-  }
+    {
+        "title": "CEO",
+        "description": "-",
+        "is_active": true
+    },
+    {
+        "title": "GM",
+        "description": "General Manager",
+        "is_active": true
+    },
+    {
+        "title": "Manager",
+        "description": "Manager",
+        "is_active": true
+    },
+    {
+        "title": "Ast",
+        "description": "Assistant Manager",
+        "is_active": true
+    },
+    {
+        "title": "Sup",
+        "description": "Supervisor",
+        "is_active": true
+    },
+    {
+        "title": "Leader",
+        "description": "Leader",
+        "is_active": true
+    },
+    {
+        "title": "Staff",
+        "description": "-",
+        "is_active": true
+    },
+    {
+        "title": "Operator",
+        "description": "-",
+        "is_active": true
+    }
 ]

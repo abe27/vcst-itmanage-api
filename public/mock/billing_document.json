@@ -1,0 +1,22 @@
+[
+    {
+        "title": "Purchase Order",
+        "description": "-",
+        "is_active": true
+    },
+    {
+        "title": "TXT invoice/delivery order",
+        "description": "-",
+        "is_active": true
+    },
+    {
+        "title": "Receipt",
+        "description": "-",
+        "is_active": true
+    },
+    {
+        "title": "Bill",
+        "description": "-",
+        "is_active": true
+    }
+]
