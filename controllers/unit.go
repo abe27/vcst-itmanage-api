@@ -11,7 +11,7 @@ func UnitGetController(c *fiber.Ctx) error {
 	db := WHSDb(c)
 	if c.Query("id") != "" {
 		var unit models.Unit
-		if err := db.Scopes(services.Paginate(c)).First(&unit, &models.Unit{ID: c.Query("id")}).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).First(&unit, &models.Unit{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -22,7 +22,7 @@ func UnitGetController(c *fiber.Ctx) error {
 	}
 
 	var unit []models.Unit
-	if err := db.Scopes(services.Paginate(c)).First(&unit, &models.Unit{ID: c.Query("id")}).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).First(&unit, &models.Unit{FCSKID: c.Query("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
@@ -65,7 +65,7 @@ func UnitPutController(c *fiber.Ctx) error {
 
 	var Unit models.Unit
 	db := WHSDb(c)
-	if err := db.First(&Unit, &models.Unit{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&Unit, &models.Unit{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}
@@ -86,7 +86,7 @@ func UnitDeleteController(c *fiber.Ctx) error {
 	var r models.Response
 	var unit models.Unit
 	db := WHSDb(c)
-	if err := db.First(&unit, &models.Unit{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&unit, &models.Unit{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}

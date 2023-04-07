@@ -23,7 +23,7 @@ func StockGetController(c *fiber.Ctx) error {
 
 	if c.Query("id") != "" {
 		var Stock models.Stock
-		if err := db.Preload("Product.ProductType").Preload("Product.Unit").Preload("WHouse").First(&Stock, &models.Stock{ID: c.Query("id")}).Error; err != nil {
+		if err := db.Preload("Product.ProductType").Preload("Product.Unit").Preload("WHouse").First(&Stock, &models.Stock{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(r)
 		}
@@ -34,7 +34,7 @@ func StockGetController(c *fiber.Ctx) error {
 	}
 
 	var Stock []models.Stock
-	if err := db.Scopes(services.Paginate(c)).Preload("Product.ProductType").Preload("Product.Unit").Preload("WHouse").Find(&Stock, &models.Stock{ID: c.Query("id")}).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).Preload("Product.ProductType").Preload("Product.Unit").Preload("WHouse").Find(&Stock, &models.Stock{FCSKID: c.Query("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
@@ -80,7 +80,7 @@ func StockPutController(c *fiber.Ctx) error {
 
 	var Stock models.Stock
 	db := WHSDb(c)
-	if err := db.First(&Stock, &models.Stock{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&Stock, &models.Stock{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}
@@ -104,7 +104,7 @@ func StockDeleteController(c *fiber.Ctx) error {
 	var r models.Response
 	var Stock models.Stock
 	db := WHSDb(c)
-	if err := db.First(&Stock, &models.Stock{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&Stock, &models.Stock{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}

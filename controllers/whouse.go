@@ -11,7 +11,7 @@ func WHouseGetController(c *fiber.Ctx) error {
 	db := WHSDb(c)
 	if c.Query("id") != "" {
 		var WHouse models.WHouse
-		if err := db.Scopes(services.Paginate(c)).First(&WHouse, &models.WHouse{ID: c.Query("id")}).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).First(&WHouse, &models.WHouse{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -22,7 +22,7 @@ func WHouseGetController(c *fiber.Ctx) error {
 	}
 
 	var WHouse []models.WHouse
-	if err := db.Scopes(services.Paginate(c)).First(&WHouse, &models.WHouse{ID: c.Query("id")}).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).First(&WHouse, &models.WHouse{FCSKID: c.Query("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
@@ -65,7 +65,7 @@ func WHousePutController(c *fiber.Ctx) error {
 
 	var WHouse models.WHouse
 	db := WHSDb(c)
-	if err := db.First(&WHouse, &models.WHouse{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&WHouse, &models.WHouse{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}
@@ -86,7 +86,7 @@ func WHouseDeleteController(c *fiber.Ctx) error {
 	var r models.Response
 	var WHouse models.WHouse
 	db := WHSDb(c)
-	if err := db.First(&WHouse, &models.WHouse{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&WHouse, &models.WHouse{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}

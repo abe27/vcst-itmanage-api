@@ -53,9 +53,9 @@ func ProductPostController(c *fiber.Ctx) error {
 	prod.FCSNAME2 = frm.FCSNAME2
 	prod.FCNAME = frm.FCNAME
 	prod.FCNAME2 = frm.FCNAME2
-	prod.FNAVGCOST = frm.FNAVGCOST
-	prod.FNSTDCOST = frm.FNSTDCOST
-	prod.FCSTATUS = frm.FCSTATUS
+	// prod.FNAVGCOST = frm.FNAVGCOST
+	// prod.FNSTDCOST = frm.FNSTDCOST
+	// prod.FCSTATUS = frm.FCSTATUS
 	// if err := db.Create(&prod).Error; err != nil {
 	// 	r.Message = err.Error()
 	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)
@@ -87,9 +87,9 @@ func ProductPutController(c *fiber.Ctx) error {
 	prod.FCSNAME2 = frm.FCSNAME2
 	prod.FCNAME = frm.FCNAME
 	prod.FCNAME2 = frm.FCNAME2
-	prod.FNAVGCOST = frm.FNAVGCOST
-	prod.FNSTDCOST = frm.FNSTDCOST
-	prod.FCSTATUS = frm.FCSTATUS
+	// prod.FNAVGCOST = frm.FNAVGCOST
+	// prod.FNSTDCOST = frm.FNSTDCOST
+	// prod.FCSTATUS = frm.FCSTATUS
 	// if err := db.Save(&prod).Error; err != nil {
 	// 	r.Message = err.Error()
 	// 	return c.Status(fiber.StatusInternalServerError).JSON(r)

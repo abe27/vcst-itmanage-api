@@ -11,7 +11,7 @@ func ProductTypeGetController(c *fiber.Ctx) error {
 	db := WHSDb(c)
 	if c.Query("id") != "" {
 		var productType models.ProductType
-		if err := db.Scopes(services.Paginate(c)).First(&productType, &models.ProductType{ID: c.Query("id")}).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).First(&productType, &models.ProductType{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -65,7 +65,7 @@ func ProductTypePutController(c *fiber.Ctx) error {
 
 	var productType models.ProductType
 	db := WHSDb(c)
-	if err := db.First(&productType, &models.ProductType{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&productType, &models.ProductType{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}
@@ -86,7 +86,7 @@ func ProductTypeDeleteController(c *fiber.Ctx) error {
 	var r models.Response
 	var productType models.ProductType
 	db := WHSDb(c)
-	if err := db.First(&productType, &models.ProductType{ID: c.Params("id")}).Error; err != nil {
+	if err := db.First(&productType, &models.ProductType{FCSKID: c.Params("id")}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(r)
 	}

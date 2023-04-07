@@ -66,13 +66,13 @@ func InitDB() {
 		Store.AutoMigrate(&models.ActivityLogging{})
 	}
 
-	if !Store.Migrator().HasTable(&models.BillingDocument{}) {
-		Store.AutoMigrate(&models.BillingDocument{})
-	}
+	// if !Store.Migrator().HasTable(&models.BillingDocument{}) {
+	// 	Store.AutoMigrate(&models.BillingDocument{})
+	// }
 
-	if !Store.Migrator().HasTable(&models.BillingStatus{}) {
-		Store.AutoMigrate(&models.BillingStatus{})
-	}
+	// if !Store.Migrator().HasTable(&models.BillingStatus{}) {
+	// 	Store.AutoMigrate(&models.BillingStatus{})
+	// }
 }
 
 func Seed() {
@@ -124,19 +124,19 @@ func Seed() {
 		Store.FirstOrCreate(&p, &models.Section{Title: p.Title})
 	}
 
-	data, _ = services.ReadJson("public/mock/billing_document.json")
-	var document []models.BillingDocument
-	json.Unmarshal(data, &document)
+	// data, _ = services.ReadJson("public/mock/billing_document.json")
+	// var document []models.BillingDocument
+	// json.Unmarshal(data, &document)
 
-	for _, p := range document {
-		Store.FirstOrCreate(&p, &models.BillingDocument{Title: p.Title})
-	}
+	// for _, p := range document {
+	// 	Store.FirstOrCreate(&p, &models.BillingDocument{Title: p.Title})
+	// }
 
-	data, _ = services.ReadJson("public/mock/billing_status.json")
-	var billingStatus []models.BillingStatus
-	json.Unmarshal(data, &billingStatus)
+	// data, _ = services.ReadJson("public/mock/billing_status.json")
+	// var billingStatus []models.BillingStatus
+	// json.Unmarshal(data, &billingStatus)
 
-	for _, p := range billingStatus {
-		Store.FirstOrCreate(&p, &models.BillingStatus{Title: p.Title})
-	}
+	// for _, p := range billingStatus {
+	// 	Store.FirstOrCreate(&p, &models.BillingStatus{Title: p.Title})
+	// }
 }
