@@ -1,11 +1,9 @@
 package models
 
-    import (
-        "time"
-
-        g "github.com/matoous/go-nanoid/v2"
-        "gorm.io/gorm"
-    )
+import (
+	g "github.com/matoous/go-nanoid/v2"
+	"gorm.io/gorm"
+)
     
 type Crmlead struct{
      FCADDAPVBY string `gorm:"column:FCADDAPVBY;" json:"fcaddapvby"  form:"fcaddapvby" `
