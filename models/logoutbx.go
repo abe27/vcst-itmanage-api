@@ -1,11 +1,9 @@
 package models
 
-    import (
-        "time"
-
-        g "github.com/matoous/go-nanoid/v2"
-        "gorm.io/gorm"
-    )
+import (
+	g "github.com/matoous/go-nanoid/v2"
+	"gorm.io/gorm"
+)
     
 type Logoutbx struct{
      FCAPPNAME string `gorm:"column:FCAPPNAME;" json:"fcappname"  form:"fcappname" `
