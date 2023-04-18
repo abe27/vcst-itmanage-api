@@ -44,8 +44,15 @@ func BookGetController(c *fiber.Ctx) error {
 }
 
 func BookPostController(c *fiber.Ctx) error {
+	db := WHSDb(c)
 	var r models.Response
-	return c.Status(fiber.StatusOK).JSON(&r)
+	r.Message = "Created Successfully!"
+	var frm models.Book
+	if err := c.BodyParser(&frm); err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(&r)
+	}
+	return c.Status(fiber.StatusCreated).JSON(&r)
 }
 
 func BookPutController(c *fiber.Ctx) error {
