@@ -97,4 +97,11 @@ func SetupRouter(r *fiber.App) {
 	book.Post("", c.BookPostController)
 	book.Put("/:id", c.BookPutController)
 	book.Delete("/:id", c.BookDeleteController)
+
+	order := auth.Group("/order")
+	orderHead := order.Group("/head")
+	orderHead.Get("", c.OrderHeadGetController)
+	orderHead.Post("", c.OrderHeadPostController)
+	orderHead.Put("/:id", c.OrderHeadPutController)
+	orderHead.Delete("/:id", c.OrderHeadDeleteController)
 }
