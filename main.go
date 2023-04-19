@@ -49,8 +49,8 @@ func init() {
 	if err != nil {
 		panic("Failed to connect to database")
 	}
-	configs.InitDB()
-	configs.Seed()
+	// configs.InitDB()
+	// configs.Seed()
 
 	/// Setup database Master
 	dnsAAA := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_AAA_USERNAME"), os.Getenv("MSSQL_AAA_PASSWORD"), os.Getenv("MSSQL_AAA_HOST"), os.Getenv("MSSQL_AAA_PORT"), os.Getenv("MSSQL_AAA_DBNAME"))

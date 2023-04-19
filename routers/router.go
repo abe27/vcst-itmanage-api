@@ -104,4 +104,10 @@ func SetupRouter(r *fiber.App) {
 	orderHead.Post("", c.OrderHeadPostController)
 	orderHead.Put("/:id", c.OrderHeadPutController)
 	orderHead.Delete("/:id", c.OrderHeadDeleteController)
+
+	orderDetail := order.Group("/detail")
+	orderDetail.Get("", c.OrderDetailGetController)
+	orderDetail.Post("", c.OrderDetailPostController)
+	orderDetail.Put("/:id", c.OrderDetailPutController)
+	orderDetail.Delete("/:id", c.OrderDetailDeleteController)
 }

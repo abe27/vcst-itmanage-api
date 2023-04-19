@@ -35,8 +35,13 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 	}
 
 	if c.Query("book") != "" {
-		var order models.Orderh
-		if err := db.
+		if len(c.Query("start")) == 0 && len(c.Query("end")) == 0 {
+			r.Message = "Please enter start and end date!"
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+
+		var order []models.Orderh
+		if err := db.Scopes(services.Paginate(c)).
 			Preload("Corp").
 			Preload("Book").
 			Preload("Branch").
@@ -49,7 +54,7 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 			Preload("Proj").
 			Preload("DeliverTo").
 			Preload("Payterm").
-			First(&order, &models.Orderh{FCBOOK: c.Query("book")}).Error; err != nil {
+			Find(&order, &models.Orderh{FCBOOK: c.Query("book")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}

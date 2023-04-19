@@ -77,3 +77,4 @@ $RECYCLE.BIN/
 go.sum
 .env
 tmp/
+.air.toml
