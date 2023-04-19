@@ -13,7 +13,6 @@ type Refprod struct {
 	FCBOICARD  string    `gorm:"column:FCBOICARD;" json:"fcboicard"  form:"fcboicard" `
 	FCBOIGROUP string    `gorm:"column:FCBOIGROUP;" json:"fcboigroup"  form:"fcboigroup" `
 	FCBRANCH   string    `gorm:"column:FCBRANCH;" json:"fcbranch"  form:"fcbranch" `
-	FCCOOR     string    `gorm:"column:FCCOOR;" json:"fccoor"  form:"fccoor" `
 	FCCORP     string    `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
 	FCCORRECTB string    `gorm:"column:FCCORRECTB;" json:"fccorrectb"  form:"fccorrectb" `
 	FCCOUNTER  string    `gorm:"column:FCCOUNTER;" json:"fccounter"  form:"fccounter" `
@@ -154,12 +153,11 @@ type Refprod struct {
 	Job        *Job      `gorm:"foreignKey:FCJOB;references:FCSKID;" json:"job"`
 	Glhead     *Glhead   `gorm:"foreignKey:FCGLHEAD;references:FCSKID;" json:"glhead"`
 	Glref      *Glref    `gorm:"foreignKey:FCGLREF;references:FCSKID;" json:"glref"`
-	Coor       *Coor     `gorm:"foreignKey:FCCOCOR;references:FCSKID;" json:"coor"`
 	Prod       *Product  `gorm:"foreignKey:FCPROD;references:FCSKID;" json:"prod"`
 	Unit       *Unit     `gorm:"foreignKey:FCUM;references:FCSKID;" json:"unit"`
 	UnitSTD    *Unit     `gorm:"foreignKey:FCUMSTD;references:FCSKID;" json:"unit_standard"`
-	Stum       *Unit     `gorm:"foreignKey:FCSTUM;references:FCSK;" json:"stum"`
-	StumStd    *Unit     `gorm:"foreignKey:FCSTUMSTD;references:FCSK;" json:"stum_std"`
+	Stum       *Unit     `gorm:"foreignKey:FCSTUM;references:FCSKID;" json:"stum"`
+	StumStd    *Unit     `gorm:"foreignKey:FCSTUMSTD;references:FCSKID;" json:"stum_std"`
 	WHouse     *WHouse   `gorm:"foreignKey:FCWHOUSE;references:FCSKID;" json:"whouse"`
 	Proj       *Proj     `gorm:"foreignKey:FCPROJ;reference:FCSKID;" json:"proj"`
 	Gl         *Gl       `gorm:"foreignKey:FCGL;references:FCSKID;" json:"gl"`
