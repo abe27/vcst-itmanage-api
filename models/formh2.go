@@ -123,7 +123,7 @@ type Formh2 struct {
 	FNUSELANG2 float64   `gorm:"column:FNUSELANG2;" json:"fnuselang2"  form:"fnuselang2" `
 	FNUSESOMEP float64   `gorm:"column:FNUSESOMEP;" json:"fnusesomep"  form:"fnusesomep" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTSRCUPD   time.Time `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" default:"now"`
 }

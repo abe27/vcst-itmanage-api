@@ -53,7 +53,7 @@ type Rubbin struct {
 	FNAMT      float64   `gorm:"column:FNAMT;" json:"fnamt"  form:"fnamt" `
 	FNOLDAMT   float64   `gorm:"column:FNOLDAMT;" json:"fnoldamt"  form:"fnoldamt" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 }
 

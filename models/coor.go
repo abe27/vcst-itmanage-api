@@ -85,7 +85,7 @@ type Coor struct {
 	FNLONG     float64   `gorm:"column:FNLONG;" json:"fnlong"  form:"fnlong" `
 	FNLTDPO    float64   `gorm:"column:FNLTDPO;" json:"fnltdpo"  form:"fnltdpo" `
 	FCLID      string    `gorm:"column:FCLID;" json:"fclid"  form:"fclid" `
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FCCOORPGRP string    `gorm:"column:FCCOORPGRP;" json:"fccoorpgrp"  form:"fccoorpgrp" `
 	FCU1STATUS string    `gorm:"column:FCU1STATUS;" json:"fcu1status"  form:"fcu1status" `
 	FCU2STATUS string    `gorm:"column:FCU2STATUS;" json:"fcu2status"  form:"fcu2status" `

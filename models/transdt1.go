@@ -42,7 +42,7 @@ type Transdt1 struct {
 	FTCANCDATE string    `gorm:"column:FTCANCDATE;" json:"ftcancdate"  form:"ftcancdate" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
 	FTEDITDATE string    `gorm:"column:FTEDITDATE;" json:"fteditdate"  form:"fteditdate" `
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTPRNDATE  time.Time `gorm:"column:FTPRNDATE;" json:"ftprndate"  form:"ftprndate" default:"now"`
 	FTSRCUPD   string    `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `

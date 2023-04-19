@@ -131,7 +131,7 @@ type Orderi struct {
 	FNXRATE    float64    `gorm:"column:FNXRATE;" json:"fnxrate"  form:"fnxrate" `
 	FTDATETIME time.Time  `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
 	FTLASRECAL string     `gorm:"column:FTLASRECAL;" json:"ftlasrecal"  form:"ftlasrecal" `
-	FTLASTEDIT string     `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time  `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time  `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTSRCUPD   string     `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `
 	Corp       *Corp      `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`

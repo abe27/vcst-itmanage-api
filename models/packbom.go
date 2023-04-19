@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	g "github.com/matoous/go-nanoid/v2"
 	"gorm.io/gorm"
 )
@@ -34,7 +36,7 @@ type Packbom struct {
 	FNCONTENT  string `gorm:"column:FNCONTENT;" json:"fncontent"  form:"fncontent" `
 	FNRATIO    string `gorm:"column:FNRATIO;" json:"fnratio"  form:"fnratio" `
 	FTDATETIME string `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" `
-	FTLASTEDIT string `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  string `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" `
 	FTSRCUPD   string `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `
 }

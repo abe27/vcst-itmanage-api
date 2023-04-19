@@ -44,7 +44,7 @@ type Emplr struct {
 	FNMISSPASS float64   `gorm:"column:FNMISSPASS;" json:"fnmisspass"  form:"fnmisspass" `
 	FNSTATUS   float64   `gorm:"column:FNSTATUS;" json:"fnstatus"  form:"fnstatus" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  string    `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" `
 }
 

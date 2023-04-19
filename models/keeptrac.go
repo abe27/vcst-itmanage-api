@@ -41,7 +41,7 @@ type Keeptrac struct {
 	FNEDITNO   float64   `gorm:"column:FNEDITNO;" json:"fneditno"  form:"fneditno" `
 	FNINSNO    float64   `gorm:"column:FNINSNO;" json:"fninsno"  form:"fninsno" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  string    `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" `
 }
 

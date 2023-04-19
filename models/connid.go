@@ -32,7 +32,7 @@ type Connid struct {
 	FMEXTRATAG string    `gorm:"column:FMEXTRATAG;" json:"fmextratag"  form:"fmextratag" `
 	FNPROCID   float64   `gorm:"column:FNPROCID;" json:"fnprocid"  form:"fnprocid" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT string    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTLIVING   time.Time `gorm:"column:FTLIVING;" json:"ftliving"  form:"ftliving" default:"now"`
 	FTLOGIN    time.Time `gorm:"column:FTLOGIN;" json:"ftlogin"  form:"ftlogin" default:"now"`
