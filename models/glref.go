@@ -158,7 +158,7 @@ type Glref struct {
 	// FDLAYDATE      string     `gorm:"column:FDLAYDATE;" json:"fdlaydate"  form:"fdlaydate" `
 	// FDRECEDATE     string     `gorm:"column:FDRECEDATE;" json:"fdrecedate"  form:"fdrecedate" `
 	// FDVATDATE      string     `gorm:"column:FDVATDATE;" json:"fdvatdate"  form:"fdvatdate" `
-	// FIMILLISEC     int64      `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
+	FIMILLISEC int64 `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
 	// FMDOCFLOW      string     `gorm:"column:FMDOCFLOW;" json:"fmdocflow"  form:"fmdocflow" `
 	// FMERRMSG       string     `gorm:"column:FMERRMSG;" json:"fmerrmsg"  form:"fmerrmsg" `
 	// FMEXTRATAG     string     `gorm:"column:FMEXTRATAG;" json:"fmextratag"  form:"fmextratag" `
@@ -254,31 +254,22 @@ func (obj *Glref) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type GlRefForm struct {
-	// FCATSTEP   string    `gorm:"column:FCATSTEP;" json:"fcatstep"  form:"fcatstep" `
-	// FCBOOK     string    `gorm:"column:FCBOOK;" json:"fcbook"  form:"fcbook" `
-	// FCBRANCH   string    `gorm:"column:FCBRANCH;" json:"fcbranch"  form:"fcbranch" `
-	FCCODE string `gorm:"column:FCCODE;" json:"fccode"  form:"fccode" `
-	// FCCOOR     string    `gorm:"column:FCCOOR;" json:"fccoor"  form:"fccoor" `
-	// FCCORP     string    `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
-	// FCCORRECTB string    `gorm:"column:FCCORRECTB;" json:"fccorrectb"  form:"fccorrectb" `
-	// FCCREATEBY string    `gorm:"column:FCCREATEBY;" json:"fccreateby"  form:"fccreateby" `
-	// FCCREATETY string    `gorm:"column:FCCREATETY;" json:"fccreatety"  form:"fccreatety" `
-	FCDATASER  string    `gorm:"column:FCDATASER;" json:"fcdataser"  form:"fcdataser" default:"$$$+"`
-	// FCDELICOOR string    `gorm:"column:FCDELICOOR;" json:"fcdelicoor"  form:"fcdelicoor" `
-	// FCDEPT     string    `gorm:"column:FCDEPT;" json:"fcdept"  form:"fcdept" `
-	// FCEAFTERR  string    `gorm:"column:FCEAFTERR;" json:"fceafterr"  form:"fceafterr" `
-	FCGID      string    `gorm:"column:FCGID;" json:"fcgid"  form:"fcgid" `
-	FCGLHEAD   string    `gorm:"column:FCGLHEAD;" json:"fcglhead"  form:"fcglhead" `
-	FCJOB      string    `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
-	FCPROJ     string    `gorm:"column:FCPROJ;" json:"fcproj"  form:"fcproj" `
-	FCREFNO    string    `gorm:"column:FCREFNO;" json:"fcrefno"  form:"fcrefno" `
-	FCREFTYPE  string    `gorm:"column:FCREFTYPE;" json:"fcreftype"  form:"fcreftype" `
-	FCRFTYPE   string    `gorm:"column:FCRFTYPE;" json:"fcrftype"  form:"fcrftype" `
-	// FCSECT     string    `gorm:"column:FCSECT;" json:"fcsect"  form:"fcsect" `
-	FCSTEP     string    `gorm:"column:FCSTEP;" json:"fcstep"  form:"fcstep" default:"I"`
-	FCVATCOOR  string    `gorm:"column:FCVATCOOR;" json:"fcvatcoor"  form:"fcvatcoor" `
-	FDDATE     time.Time `gorm:"column:FDDATE;" json:"fddate"  form:"fddate" default:"now"`
-	FNAFTDEP   float64   `gorm:"column:FNAFTDEP;" json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
-	FNAFTDEPKE float64   `gorm:"column:FNAFTDEPKE;" json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`
-	FNAMT      float64   `gorm:"column:FNAMT;" json:"fnamt"  form:"fnamt" `
+	FCBRANCH   string       `json:"fcbranch" form:"fcbranch"`
+	FCWHOUSE   string       `json:"fcwhouse" form:"fcwhouse"`
+	FCCODE     string       `json:"fccode"  form:"fccode" `
+	FCGID      string       `json:"fcgid"  form:"fcgid" `
+	FCGLHEAD   string       `json:"fcglhead"  form:"fcglhead" `
+	FCJOB      string       `json:"fcjob"  form:"fcjob" `
+	FCPROJ     string       `json:"fcproj"  form:"fcproj" `
+	FCREFNO    string       `json:"fcrefno"  form:"fcrefno" `
+	FCREFTYPE  string       `json:"fcreftype"  form:"fcreftype" `
+	FCRFTYPE   string       `json:"fcrftype"  form:"fcrftype" `
+	FCSTEP     string       `json:"fcstep"  form:"fcstep" default:"I"`
+	FDDATE     time.Time    `json:"fddate"  form:"fddate" default:"now"`
+	FNAFTDEP   float64      `json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
+	FNAFTDEPKE float64      `json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`
+	REFPROD    []FrmRefProd `json:"ref_prod" form:"ref_prod"`
+}
+
+type GlrefHistory struct {
 }

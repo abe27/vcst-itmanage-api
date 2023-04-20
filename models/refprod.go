@@ -174,3 +174,9 @@ func (obj *Refprod) BeforeCreate(tx *gorm.DB) (err error) {
 	obj.FCSKID = id
 	return
 }
+
+type FrmRefProd struct {
+	FCCODE string  `json:"fccode" form:"fccode"`
+	PACK   int64   `json:"pack" form:"pack"`
+	QTY    float64 `json:"qty" form:"qty"`
+}

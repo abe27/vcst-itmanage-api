@@ -18,6 +18,8 @@ var (
 	StoreFormulaVCS  *gorm.DB
 	StoreVCST        *gorm.DB
 	StoreFormulaVCST *gorm.DB
+    FCDATASER string
+    LINE_NOTIFY_TOKEN string
 )
 
 func InitDB() {
