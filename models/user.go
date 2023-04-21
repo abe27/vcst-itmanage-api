@@ -1,7 +1,6 @@
 package models
 
 import (
-    "fmt"
 	"time"
 
 	g "github.com/matoous/go-nanoid/v2"

@@ -32,16 +32,38 @@ type Glref struct {
 	FCCORRECTB string `gorm:"column:FCCORRECTB;" json:"fccorrectb"  form:"fccorrectb" `
 	// FCCOUNTER      string     `gorm:"column:FCCOUNTER;" json:"fccounter"  form:"fccounter" `
 	// FCCREATEAP     string     `gorm:"column:FCCREATEAP;" json:"fccreateap"  form:"fccreateap" `
-	FCCREATEBY string `gorm:"column:FCCREATEBY;" json:"fccreateby"  form:"fccreateby" `
-	FCCREATETY string `gorm:"column:FCCREATETY;" json:"fccreatety"  form:"fccreatety" `
+	FCCREATEBY string    `gorm:"column:FCCREATEBY;" json:"fccreateby"  form:"fccreateby" `
+	FCCREATETY string    `gorm:"column:FCCREATETY;" json:"fccreatety"  form:"fccreatety" `
+	FCDATASER  string    `gorm:"column:FCDATASER;" json:"fcdataser"  form:"fcdataser" default:"$$$+"`
+	FCDELICOOR string    `gorm:"column:FCDELICOOR;" json:"fcdelicoor"  form:"fcdelicoor" `
+	FCDEPT     string    `gorm:"column:FCDEPT;" json:"fcdept"  form:"fcdept" `
+	FCEAFTERR  string    `gorm:"column:FCEAFTERR;" json:"fceafterr"  form:"fceafterr" `
+	FCFRWHOUSE string    `gorm:"column:FCFRWHOUSE;" json:"fcfrwhouse"  form:"fcfrwhouse" `
+	FCGID      string    `gorm:"column:FCGID;" json:"fcgid"  form:"fcgid" `
+	FCGLHEAD   string    `gorm:"column:FCGLHEAD;" json:"fcglhead"  form:"fcglhead" `
+	FCJOB      string    `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
+	FCPROJ     string    `gorm:"column:FCPROJ;" json:"fcproj"  form:"fcproj" `
+	FCREFNO    string    `gorm:"column:FCREFNO;" json:"fcrefno"  form:"fcrefno" `
+	FCREFTYPE  string    `gorm:"column:FCREFTYPE;" json:"fcreftype"  form:"fcreftype" `
+	FCRFTYPE   string    `gorm:"column:FCRFTYPE;" json:"fcrftype"  form:"fcrftype" `
+	FCSECT     string    `gorm:"column:FCSECT;" json:"fcsect"  form:"fcsect" `
+	FCSKID     string    `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"`
+	FCSTEP     string    `gorm:"column:FCSTEP;" json:"fcstep"  form:"fcstep" default:"I"`
+	FCTOWHOUSE string    `gorm:"column:FCTOWHOUSE;" json:"fctowhouse"  form:"fctowhouse" `
+	FCVATCOOR  string    `gorm:"column:FCVATCOOR;" json:"fcvatcoor"  form:"fcvatcoor" `
+	FDDATE     time.Time `gorm:"column:FDDATE;" json:"fddate"  form:"fddate" default:"now"`
+	FIMILLISEC int64     `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
+	FNAFTDEP   float64   `gorm:"column:FNAFTDEP;" json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
+	FNAFTDEPKE float64   `gorm:"column:FNAFTDEPKE;" json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`
+	FNAMT      float64   `gorm:"column:FNAMT;" json:"fnamt"  form:"fnamt" `
+	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
+	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	// FCCUACC        string     `gorm:"column:FCCUACC;" json:"fccuacc"  form:"fccuacc" `
 	// FCCURRENCY     string     `gorm:"column:FCCURRENCY;" json:"fccurrency"  form:"fccurrency" `
 	// FCDATAIMP      string     `gorm:"column:FCDATAIMP;" json:"fcdataimp"  form:"fcdataimp"`
-	FCDATASER string `gorm:"column:FCDATASER;" json:"fcdataser"  form:"fcdataser" default:"$$$+"`
 	// FCDEBTCODE     string     `gorm:"column:FCDEBTCODE;" json:"fcdebtcode"  form:"fcdebtcode" `
-	FCDELICOOR string `gorm:"column:FCDELICOOR;" json:"fcdelicoor"  form:"fcdelicoor" `
 	// FCDELIEMPL     string     `gorm:"column:FCDELIEMPL;" json:"fcdeliempl"  form:"fcdeliempl" `
-	FCDEPT string `gorm:"column:FCDEPT;" json:"fcdept"  form:"fcdept" `
 	// FCDISCSTR      string     `gorm:"column:FCDISCSTR;" json:"fcdiscstr"  form:"fcdiscstr" `
 	// FCDOCAPRVB     string     `gorm:"column:FCDOCAPRVB;" json:"fcdocaprvb"  form:"fcdocaprvb" `
 	// FCDOCFLOWI     string     `gorm:"column:FCDOCFLOWI;" json:"fcdocflowi"  form:"fcdocflowi" `
@@ -56,19 +78,14 @@ type Glref struct {
 	// FCDTYPE7       string     `gorm:"column:FCDTYPE7;" json:"fcdtype7"  form:"fcdtype7" `
 	// FCDTYPE8       string     `gorm:"column:FCDTYPE8;" json:"fcdtype8"  form:"fcdtype8" `
 	// FCDTYPE9       string     `gorm:"column:FCDTYPE9;" json:"fcdtype9"  form:"fcdtype9" `
-	FCEAFTERR string `gorm:"column:FCEAFTERR;" json:"fceafterr"  form:"fceafterr" `
 	// FCEMPL         string     `gorm:"column:FCEMPL;" json:"fcempl"  form:"fcempl" `
 	// FCFRLOCATE     string     `gorm:"column:FCFRLOCATE;" json:"fcfrlocate"  form:"fcfrlocate" `
 	// FCFRSTORE      string     `gorm:"column:FCFRSTORE;" json:"fcfrstore"  form:"fcfrstore" `
-	// FCFRWHOUSE     string     `gorm:"column:FCFRWHOUSE;" json:"fcfrwhouse"  form:"fcfrwhouse" `
-	FCGID    string `gorm:"column:FCGID;" json:"fcgid"  form:"fcgid" `
-	FCGLHEAD string `gorm:"column:FCGLHEAD;" json:"fcglhead"  form:"fcglhead" `
 	// FCGLHEADCA     string     `gorm:"column:FCGLHEADCA;" json:"fcglheadca"  form:"fcglheadca" `
 	// FCHASCHAIN     string     `gorm:"column:FCHASCHAIN;" json:"fchaschain"  form:"fchaschain" `
 	// FCHASRET       string     `gorm:"column:FCHASRET;" json:"fchasret"  form:"fchasret" `
 	// FCINVIA        string     `gorm:"column:FCINVIA;" json:"fcinvia"  form:"fcinvia" `
 	// FCISCASH       string     `gorm:"column:FCISCASH;" json:"fciscash"  form:"fciscash" `
-	FCJOB string `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
 	// FCLAYH         string     `gorm:"column:FCLAYH;" json:"fclayh"  form:"fclayh" `
 	// FCLAYMETHD     string     `gorm:"column:FCLAYMETHD;" json:"fclaymethd"  form:"fclaymethd" `
 	// FCLAYSEQ       string     `gorm:"column:FCLAYSEQ;" json:"fclayseq"  form:"fclayseq" `
@@ -77,7 +94,7 @@ type Glref struct {
 	// FCLINKAPP2     string     `gorm:"column:FCLINKAPP2;" json:"fclinkapp2"  form:"fclinkapp2" `
 	// FCLINKSTP1     string     `gorm:"column:FCLINKSTP1;" json:"fclinkstp1"  form:"fclinkstp1" `
 	// FCLINKSTP2     string     `gorm:"column:FCLINKSTP2;" json:"fclinkstp2"  form:"fclinkstp2" `
-	// FCLUPDAPP      string     `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
+	FCLUPDAPP string `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
 	// FCMACHINE      string     `gorm:"column:FCMACHINE;" json:"fcmachine"  form:"fcmachine" `
 	// FCMNMGLH       string     `gorm:"column:FCMNMGLH;" json:"fcmnmglh"  form:"fcmnmglh" `
 	// FCMNMGLHCA     string     `gorm:"column:FCMNMGLHCA;" json:"fcmnmglhca"  form:"fcmnmglhca" `
@@ -90,7 +107,6 @@ type Glref struct {
 	// FCPERIODS      string     `gorm:"column:FCPERIODS;" json:"fcperiods"  form:"fcperiods" `
 	// FCPERSON       string     `gorm:"column:FCPERSON;" json:"fcperson"  form:"fcperson" `
 	// FCPLANT        string     `gorm:"column:FCPLANT;" json:"fcplant"  form:"fcplant" `
-	FCPROJ string `gorm:"column:FCPROJ;" json:"fcproj"  form:"fcproj" `
 	// FCPROMOTE      string     `gorm:"column:FCPROMOTE;" json:"fcpromote"  form:"fcpromote" `
 	// FCQCMO         string     `gorm:"column:FCQCMO;" json:"fcqcmo"  form:"fcqcmo" `
 	// FCQCMOBK       string     `gorm:"column:FCQCMOBK;" json:"fcqcmobk"  form:"fcqcmobk" `
@@ -98,27 +114,12 @@ type Glref struct {
 	// FCRECALBY      string     `gorm:"column:FCRECALBY;" json:"fcrecalby"  form:"fcrecalby" `
 	// FCRECVMAN      string     `gorm:"column:FCRECVMAN;" json:"fcrecvman"  form:"fcrecvman" `
 	// FCREFDO        string     `gorm:"column:FCREFDO;" json:"fcrefdo"  form:"fcrefdo" `
-	FCREFNO   string `gorm:"column:FCREFNO;" json:"fcrefno"  form:"fcrefno" `
-	FCREFTYPE string `gorm:"column:FCREFTYPE;" json:"fcreftype"  form:"fcreftype" `
-	FCRFTYPE  string `gorm:"column:FCRFTYPE;" json:"fcrftype"  form:"fcrftype" `
-	FCSECT    string `gorm:"column:FCSECT;" json:"fcsect"  form:"fcsect" `
 	// FCSELTAG       string     `gorm:"column:FCSELTAG;" json:"fcseltag"  form:"fcseltag" `
 	// FCSEQ          string     `gorm:"column:FCSEQ;" json:"fcseq"  form:"fcseq" `
 	// FCSHOWPLED     string     `gorm:"column:FCSHOWPLED;" json:"fcshowpled"  form:"fcshowpled" `
 	// FCSIGNETAX     string     `gorm:"column:FCSIGNETAX;" json:"fcsignetax"  form:"fcsignetax" `
-	FCSKID string `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"`
 	// FCSRCUPD       string     `gorm:"column:FCSRCUPD;" json:"fcsrcupd"  form:"fcsrcupd" `
 	// FCSTAT         string     `gorm:"column:FCSTAT;" json:"fcstat"  form:"fcstat" `
-	FCSTEP string `gorm:"column:FCSTEP;" json:"fcstep"  form:"fcstep" default:"I"`
-	// FCSTEPD        string     `gorm:"column:FCSTEPD;" json:"fcstepd"  form:"fcstepd" `
-	// FCSTEPX1       string     `gorm:"column:FCSTEPX1;" json:"fcstepx1"  form:"fcstepx1" `
-	// FCSTEPX2       string     `gorm:"column:FCSTEPX2;" json:"fcstepx2"  form:"fcstepx2" `
-	// FCSUBBR        string     `gorm:"column:FCSUBBR;" json:"fcsubbr"  form:"fcsubbr" `
-	// FCSUBTXID      string     `gorm:"column:FCSUBTXID;" json:"fcsubtxid"  form:"fcsubtxid" `
-	// FCTIMESTAM     string     `gorm:"column:FCTIMESTAM;" json:"fctimestam"  form:"fctimestam" `
-	// FCTOLOCATE     string     `gorm:"column:FCTOLOCATE;" json:"fctolocate"  form:"fctolocate" `
-	// FCTOSTORE      string     `gorm:"column:FCTOSTORE;" json:"fctostore"  form:"fctostore" `
-	// FCTOWHOUSE     string     `gorm:"column:FCTOWHOUSE;" json:"fctowhouse"  form:"fctowhouse" `
 	// FCTRADETRM     string     `gorm:"column:FCTRADETRM;" json:"fctradetrm"  form:"fctradetrm" `
 	// FCTRANWHY      string     `gorm:"column:FCTRANWHY;" json:"fctranwhy"  form:"fctranwhy" `
 	// FCTXBOOK       string     `gorm:"column:FCTXBOOK;" json:"fctxbook"  form:"fctxbook" `
@@ -141,7 +142,6 @@ type Glref struct {
 	// FCU9STATUS     string     `gorm:"column:FCU9STATUS;" json:"fcu9status"  form:"fcu9status" `
 	// FCUDATE        string     `gorm:"column:FCUDATE;" json:"fcudate"  form:"fcudate" `
 	// FCUTIME        string     `gorm:"column:FCUTIME;" json:"fcutime"  form:"fcutime" `
-	FCVATCOOR string `gorm:"column:FCVATCOOR;" json:"fcvatcoor"  form:"fcvatcoor" `
 	// FCVATDUE       string     `gorm:"column:FCVATDUE;" json:"fcvatdue"  form:"fcvatdue" `
 	// FCVATISOUT     string     `gorm:"column:FCVATISOUT;" json:"fcvatisout"  form:"fcvatisout" `
 	// FCVATSEQ       string     `gorm:"column:FCVATSEQ;" json:"fcvatseq"  form:"fcvatseq" `
@@ -151,7 +151,6 @@ type Glref struct {
 	// FCXFERSTEP     string     `gorm:"column:FCXFERSTEP;" json:"fcxferstep"  form:"fcxferstep" `
 	// FCZIP          string     `gorm:"column:FCZIP;" json:"fczip"  form:"fczip" `
 	// FDAPPROVE      string     `gorm:"column:FDAPPROVE;" json:"fdapprove"  form:"fdapprove" `
-	FDDATE time.Time `gorm:"column:FDDATE;" json:"fddate"  form:"fddate" default:"now"`
 	// FDDEBTDATE     string     `gorm:"column:FDDEBTDATE;" json:"fddebtdate"  form:"fddebtdate" `
 	// FDDOCAPRV      string     `gorm:"column:FDDOCAPRV;" json:"fddocaprv"  form:"fddocaprv" `
 	// FDDUEDATE      string     `gorm:"column:FDDUEDATE;" json:"fdduedate"  form:"fdduedate" `
@@ -159,7 +158,6 @@ type Glref struct {
 	// FDLAYDATE      string     `gorm:"column:FDLAYDATE;" json:"fdlaydate"  form:"fdlaydate" `
 	// FDRECEDATE     string     `gorm:"column:FDRECEDATE;" json:"fdrecedate"  form:"fdrecedate" `
 	// FDVATDATE      string     `gorm:"column:FDVATDATE;" json:"fdvatdate"  form:"fdvatdate" `
-	FIMILLISEC int64 `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
 	// FMDOCFLOW      string     `gorm:"column:FMDOCFLOW;" json:"fmdocflow"  form:"fmdocflow" `
 	// FMERRMSG       string     `gorm:"column:FMERRMSG;" json:"fmerrmsg"  form:"fmerrmsg" `
 	// FMEXTRATAG     string     `gorm:"column:FMEXTRATAG;" json:"fmextratag"  form:"fmextratag" `
@@ -173,9 +171,6 @@ type Glref struct {
 	// FMMEMDATA8     string     `gorm:"column:FMMEMDATA8;" json:"fmmemdata8"  form:"fmmemdata8" `
 	// FMMEMDATA9     string     `gorm:"column:FMMEMDATA9;" json:"fmmemdata9"  form:"fmmemdata9" `
 	// FMMEMDATAA     string     `gorm:"column:FMMEMDATAA;" json:"fmmemdataa"  form:"fmmemdataa" `
-	FNAFTDEP   float64 `gorm:"column:FNAFTDEP;" json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
-	FNAFTDEPKE float64 `gorm:"column:FNAFTDEPKE;" json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`
-	FNAMT      float64 `gorm:"column:FNAMT;" json:"fnamt"  form:"fnamt" `
 	// FNAMT2         float64    `gorm:"column:FNAMT2;" json:"fnamt2"  form:"fnamt2" `
 	// FNAMTKE        float64    `gorm:"column:FNAMTKE;" json:"fnamtke"  form:"fnamtke" `
 	// FNAMTNOVAT     float64    `gorm:"column:FNAMTNOVAT;" json:"fnamtnovat"  form:"fnamtnovat" `
@@ -221,10 +216,15 @@ type Glref struct {
 	// FNVATPORTA     float64    `gorm:"column:FNVATPORTA;" json:"fnvatporta"  form:"fnvatporta" `
 	// FNVATRATE      float64    `gorm:"column:FNVATRATE;" json:"fnvatrate"  form:"fnvatrate" `
 	// FNXRATE        float64    `gorm:"column:FNXRATE;" json:"fnxrate"  form:"fnxrate" `
-	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
+	// FCSTEPD        string     `gorm:"column:FCSTEPD;" json:"fcstepd"  form:"fcstepd" `
+	// FCSTEPX1       string     `gorm:"column:FCSTEPX1;" json:"fcstepx1"  form:"fcstepx1" `
+	// FCSTEPX2       string     `gorm:"column:FCSTEPX2;" json:"fcstepx2"  form:"fcstepx2" `
+	// FCSUBBR        string     `gorm:"column:FCSUBBR;" json:"fcsubbr"  form:"fcsubbr" `
+	// FCSUBTXID      string     `gorm:"column:FCSUBTXID;" json:"fcsubtxid"  form:"fcsubtxid" `
+	// FCTIMESTAM     string     `gorm:"column:FCTIMESTAM;" json:"fctimestam"  form:"fctimestam" `
+	// FCTOLOCATE     string     `gorm:"column:FCTOLOCATE;" json:"fctolocate"  form:"fctolocate" `
+	// FCTOSTORE      string     `gorm:"column:FCTOSTORE;" json:"fctostore"  form:"fctostore" `
 	// FTLASRECAL     string     `gorm:"column:FTLASRECAL;" json:"ftlasrecal"  form:"ftlasrecal" `
-	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
-	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	// FTRDSTEP       string     `gorm:"column:FTRDSTEP;" json:"ftrdstep"  form:"ftrdstep" `
 	// FTRECEIVE      string     `gorm:"column:FTRECEIVE;" json:"ftreceive"  form:"ftreceive" `
 	// FTSRCUPD       string     `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `
@@ -250,7 +250,7 @@ func (Glref) TableName() string {
 
 func (obj *Glref) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
-	obj.FCSKID = fmt.Sprintf("AB%s", id)
+	obj.FCSKID = fmt.Sprintf("G%sF", id)
 	return
 }
 
@@ -274,4 +274,18 @@ type GlRefForm struct {
 }
 
 type GlrefHistory struct {
+	FCCODE     string    `json:"fccode" form:"fccode"`
+	FCGID      string    `json:"fcgid" form:"fcgid"`
+	FCREFNO    string    `json:"fcrefno" form:"fcrefno"`
+	FCREFTYPE  string    `json:"fcreftype" form:"fcreftype"`
+	FCRFTYPE   string    `json:"fcretype"`
+	FCSTEP     string    `json:"fcstep"`
+	FDDATE     string    `json:"fddate"`
+	FCBRANCH   string    `json:"fcbranch"`
+	FNAMT      float64   `json:"fnamt"`
+	FCFRWHOUSE string    `json:"fcfrwhouse"`
+	FCTOWHOUSE string    `json:"fctowhouse"`
+	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
+	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 }

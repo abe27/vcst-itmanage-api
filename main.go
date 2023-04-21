@@ -49,8 +49,8 @@ func init() {
 	if err != nil {
 		panic("Failed to connect to database")
 	}
-	// configs.InitDB()
-	// configs.Seed()
+	configs.InitDB()
+	configs.Seed()
 
 	configsGorm := gorm.Config{
 		DisableAutomaticPing:                     true,

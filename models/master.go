@@ -1,7 +1,6 @@
 package models
 
 import (
-    "fmt"
 	"time"
 
 	g "github.com/matoous/go-nanoid/v2"
@@ -60,6 +59,7 @@ func (obj *Position) BeforeCreate(tx *gorm.DB) (err error) {
 
 type Department struct {
 	ID          string    `gorm:"primaryKey;size:21;" json:"id"`
+	Code        string    `gorm:"size:8" json:"code" form:"code"`
 	Title       string    `gorm:"not null;column:title;index;unique;size:50" json:"title" form:"title"`
 	Description string    `json:"description" form:"description"`
 	IsActive    bool      `gorm:"null" json:"is_active" form:"is_active" default:"false"`

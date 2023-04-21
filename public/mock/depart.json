@@ -1,42 +1,92 @@
 [
-  {
-    "title": "ITC",
-    "description": "IT Center",
-    "is_active": true
-  },
-  {
-    "title": "HR",
-    "description": "Human Resources",
-    "is_active": true
-  },
-  {
-    "title": "AC",
-    "description": "Accounting",
-    "is_active": true
-  },
-  {
-    "title": "ENG",
-    "description": "Engineering",
-    "is_active": true
-  },
-  {
-    "title": "REC",
-    "description": "Receive",
-    "is_active": true
-  },
-  {
-    "title": "QA",
-    "description": "Quality Assurance",
-    "is_active": true
-  },
-  {
-    "title": "QC",
-    "description": "Quality Control",
-    "is_active": true
-  },
-  {
-    "title": "Operation",
-    "description": "Operation",
-    "is_active": true
-  }
+    {
+        "code": "H2ZFcP02",
+        "title": "IT",
+        "description": "16"
+    },
+    {
+        "code": "H2ZFcP03",
+        "title": "วิศวกรรมผลิต",
+        "description": "14"
+    },
+    {
+        "code": "H2ZFcP04",
+        "title": "<ไม่ระบุ>",
+        "description": "-"
+    },
+    {
+        "code": "H2ZFcP05",
+        "title": "ประธานกรรมการ",
+        "description": "01"
+    },
+    {
+        "code": "H2ZFcP06",
+        "title": "กรรมการผู้จัดการ",
+        "description": "02"
+    },
+    {
+        "code": "H2ZFcP07",
+        "title": "ฝ่ายบริหาร",
+        "description": "03"
+    },
+    {
+        "code": "H2ZFcP08",
+        "title": "ทรัพยากรบุคคล",
+        "description": "04"
+    },
+    {
+        "code": "H2ZFcP09",
+        "title": "บัญชีและการเงิน",
+        "description": "05"
+    },
+    {
+        "code": "H2ZFcP0A",
+        "title": "ควบคุมและวางแผน",
+        "description": "06"
+    },
+    {
+        "code": "H2ZFcP0B",
+        "title": "จัดซื้อจัดหา",
+        "description": "07"
+    },
+    {
+        "code": "H2ZFcP0C",
+        "title": "การตลาด",
+        "description": "08"
+    },
+    {
+        "code": "H2ZFcP0D",
+        "title": "ฝ่ายผลิต",
+        "description": "09"
+    },
+    {
+        "code": "H2ZFcP0E",
+        "title": "คุณภาพ",
+        "description": "10"
+    },
+    {
+        "code": "H2ZFcP0F",
+        "title": "วิศวกรรม",
+        "description": "11"
+    },
+    {
+        "code": "H2ZFcP0G",
+        "title": "SUPCONTACK",
+        "description": "12"
+    },
+    {
+        "code": "H2ZFcP0H",
+        "title": "ไคเซน",
+        "description": "13"
+    },
+    {
+        "code": "H2ZFcP0I",
+        "title": "PC",
+        "description": "15"
+    },
+    {
+        "code": "K93waH01",
+        "title": "PI",
+        "description": "11.1"
+    }
 ]

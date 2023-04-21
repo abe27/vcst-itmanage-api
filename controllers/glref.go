@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/abe27/vcst/api.v1/configs"
@@ -141,14 +142,19 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
+	var book models.Book
+	if err := tx.Select("FCSKID,FCWHOUSE,FCPREFIX,FCCORP,FCNAME").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
+		r.Message = fmt.Sprintf("%s %s", frm.FCBOOK, err.Error())
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+
 	var rnn int64
-	if err := tx.Select("FCCODE").Where("FCREFTYPE", frm.FCREFTYPE).Model(&models.Glref{}).Count(&rnn).Error; err != nil {
+	if err := tx.Select("FCCODE").Where("FCREFTYPE", frm.FCREFTYPE).Where("FCCODE LIKE ?", (time.Now().Format("20060102"))[3:6]+"%").Model(&models.Glref{}).Count(&rnn).Error; err != nil {
 		panic(err)
 	}
 
-	frm.FCCODE = fmt.Sprintf("%06d", rnn+1)
-	prefix := frm.FCREFNO
-	frm.FCREFNO = fmt.Sprintf("%s%s%06d", prefix, (time.Now().Format("20060102"))[3:], rnn+1)
+	frm.FCCODE = fmt.Sprintf("%s%03d", (time.Now().Format("20060102"))[3:6], rnn+1)
+	frm.FCREFNO = strings.ReplaceAll(fmt.Sprintf("%s%s", book.FCPREFIX, frm.FCCODE), " ", "")
 	frm.FCGID, _ = g.New(26)
 
 	var fcamt float64 = 0
@@ -157,6 +163,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var glref models.Glref
+	glref.FCLUPDAPP = "$0"
 	glref.FCDATASER = configs.FCDATASER
 	glref.FCCODE = frm.FCCODE
 	glref.FCGID = frm.FCGID
@@ -167,6 +174,12 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FDDATE = frm.FDDATE
 	glref.FCBRANCH = branch.FCSKID
 	glref.FNAMT = fcamt
+	glref.FCCORP = book.FCCORP
+	glref.FCBOOK = book.FCSKID
+	if book.FCWHOUSE != "" {
+		glref.FCFRWHOUSE = book.FCWHOUSE
+	}
+	glref.FCTOWHOUSE = whs.FCSKID
 	glref.FIMILLISEC = time.Now().Unix()
 	glref.FTDATETIME = time.Now()
 	glref.FTLASTEDIT = time.Now()
@@ -247,7 +260,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	// Commit the transaction in case success
 	tx.Commit()
 	// End
-	msg := fmt.Sprintf("\nเปิดรับสินค้าแบบ Manual\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
+	msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
 	go services.LineNotify(msg)
 	r.Data = &glref
 	return c.Status(fiber.StatusCreated).JSON(&r)

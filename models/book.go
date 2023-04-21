@@ -74,7 +74,7 @@ type Book struct {
 	// FCORGCODE  string    `gorm:"column:FCORGCODE;" json:"fcorgcode"  form:"fcorgcode" `
 	// FCPDCAT    string    `gorm:"column:FCPDCAT;" json:"fcpdcat"  form:"fcpdcat" `
 	// FCPLANT    string    `gorm:"column:FCPLANT;" json:"fcplant"  form:"fcplant" `
-	// FCPREFIX   string    `gorm:"column:FCPREFIX;" json:"fcprefix"  form:"fcprefix" `
+	FCPREFIX string `gorm:"column:FCPREFIX;" json:"fcprefix"  form:"fcprefix" `
 	// FCPSSTYLE  string    `gorm:"column:FCPSSTYLE;" json:"fcpsstyle"  form:"fcpsstyle" `
 	FCREFTYPE string `gorm:"column:FCREFTYPE;" json:"fcreftype"  form:"fcreftype" `
 	// FCRIGSHOW  string    `gorm:"column:FCRIGSHOW;" json:"fcrigshow"  form:"fcrigshow" `
@@ -85,7 +85,7 @@ type Book struct {
 	FCSKID string `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"  form:"fcskid" `
 	// FCSRCUPD   string    `gorm:"column:FCSRCUPD;" json:"fcsrcupd"  form:"fcsrcupd" `
 	// FCSTARTCOD string    `gorm:"column:FCSTARTCOD;" json:"fcstartcod"  form:"fcstartcod" `
-	// FCTOWHOUSE string    `gorm:"column:FCTOWHOUSE;" json:"fctowhouse"  form:"fctowhouse" `
+	FCTOWHOUSE string `gorm:"column:FCTOWHOUSE;" json:"fctowhouse"  form:"fctowhouse" `
 	// FCTYPE     string    `gorm:"column:FCTYPE;" json:"fctype"  form:"fctype" `
 	FCTYPELINK string `gorm:"column:FCTYPELINK;" json:"fctypelink"  form:"fctypelink" `
 	// FCU1ACC    string    `gorm:"column:FCU1ACC;" json:"fcu1acc"  form:"fcu1acc" `
@@ -111,8 +111,8 @@ type Book struct {
 	// FCUTIME    string    `gorm:"column:FCUTIME;" json:"fcutime"  form:"fcutime" `
 	// FCVATISOUT string    `gorm:"column:FCVATISOUT;" json:"fcvatisout"  form:"fcvatisout" `
 	// FCVATTYPE  string    `gorm:"column:FCVATTYPE;" json:"fcvattype"  form:"fcvattype" `
-	FCWHOUSE string `gorm:"column:FCWHOUSE;" json:"fcwhouse"  form:"fcwhouse" `
-	// FCWHTFORM  string    `gorm:"column:FCWHTFORM;" json:"fcwhtform"  form:"fcwhtform" `
+	FCWHOUSE  string `gorm:"column:FCWHOUSE;" json:"fcwhouse"  form:"fcwhouse" `
+	FCWHTFORM string `gorm:"column:FCWHTFORM;" json:"fcwhtform"  form:"fcwhtform" `
 	// FDLOCKED   string    `gorm:"column:FDLOCKED;" json:"fdlocked"  form:"fdlocked" `
 	// FDSTETAX   string    `gorm:"column:FDSTETAX;" json:"fdstetax"  form:"fdstetax" `
 	// FIMILLISEC int64     `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
@@ -133,14 +133,16 @@ type Book struct {
 	FNVATRATE  float64   `gorm:"column:FNVATRATE;" json:"fnvatrate"  form:"fnvatrate" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
 	// FTLASTEDIT time.Time    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
-	FTLASTUPD time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
-	FTSRCUPD  time.Time `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" default:"now"`
-	CreatedBy *Empl     `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
-	Corp      *Corp     `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`
-	WHouse    *WHouse   `gorm:"foreignKey:FCWHOUSE;references:FCSKID;" json:"whouse"`
-	Accbook   *Accbook  `gorm:"foreignKey:FCACCBOOK;references:FCSKID;" json:"accbook"`
-	Gmodhead  *Gmodhead `gorm:"foreignKey:FCGMODHEAD;references:FCSKID;" json:"gmodhead"`
-	Branch    *Branch   `gorm:"foreignKey:FCBRANCH;references:FCSKID;" json:"branch"`
+	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
+	FTSRCUPD   time.Time `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" default:"now"`
+	CreatedBy  *Empl     `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
+	Corp       *Corp     `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`
+	WHouse     *WHouse   `gorm:"foreignKey:FCWHOUSE;references:FCSKID;" json:"whouse"`
+	FromWHouse *WHouse   `gorm:"foreignKey:FCWHTFORM;references:FCSKID;" json:"from_whouse"`
+	ToWHouse   *WHouse   `gorm:"foreignKey:FCTOWHOUSE;references:FCSKID;" json:"to_whouse"`
+	Accbook    *Accbook  `gorm:"foreignKey:FCACCBOOK;references:FCSKID;" json:"accbook"`
+	Gmodhead   *Gmodhead `gorm:"foreignKey:FCGMODHEAD;references:FCSKID;" json:"gmodhead"`
+	Branch     *Branch   `gorm:"foreignKey:FCBRANCH;references:FCSKID;" json:"branch"`
 }
 
 func (Book) TableName() string {
