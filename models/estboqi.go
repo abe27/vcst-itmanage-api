@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	g "github.com/matoous/go-nanoid/v2"
@@ -69,8 +70,8 @@ func (Estboqi) TableName() string {
 	return "ESTBOQI"
 }
 
-func (obj *Estboqi) BeforeCreate(tx *gorm.DB) (err error) {
+fid, _ := g.New(6)) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(8)
-	obj.FCSKID = id
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

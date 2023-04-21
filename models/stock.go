@@ -103,8 +103,8 @@ func (WHouse) TableName() string {
 }
 
 func (obj *WHouse) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }
 
@@ -200,7 +200,7 @@ func (Stock) TableName() string {
 }
 
 func (obj *Stock) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	g "github.com/matoous/go-nanoid/v2"
@@ -115,7 +116,7 @@ func (Dorderi) TableName() string {
 }
 
 func (obj *Dorderi) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

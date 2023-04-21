@@ -72,7 +72,7 @@ func (Vedipri2) TableName() string {
 }
 
 func (obj *Vedipri2) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

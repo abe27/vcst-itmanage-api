@@ -13,9 +13,9 @@ type Job struct {
 	// FCAPPNAME  string    `gorm:"column:FCAPPNAME;" json:"fcappname"  form:"fcappname" `
 	// FCBAKYRHIS string    `gorm:"column:FCBAKYRHIS;" json:"fcbakyrhis"  form:"fcbakyrhis" `
 	// FCBOIGROUP string    `gorm:"column:FCBOIGROUP;" json:"fcboigroup"  form:"fcboigroup" `
-	FCCODE     string    `gorm:"column:FCCODE;" json:"fccode"  form:"fccode" `
+	FCCODE string `gorm:"column:FCCODE;" json:"fccode"  form:"fccode" `
 	// FCCOLSEND  string    `gorm:"column:FCCOLSEND;" json:"fccolsend"  form:"fccolsend" `
-	FCCORP     string    `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
+	FCCORP string `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
 	// FCCORRECTB string    `gorm:"column:FCCORRECTB;" json:"fccorrectb"  form:"fccorrectb" `
 	// FCCREATEAP string    `gorm:"column:FCCREATEAP;" json:"fccreateap"  form:"fccreateap" `
 	// FCCREATEBY string    `gorm:"column:FCCREATEBY;" json:"fccreateby"  form:"fccreateby" `
@@ -41,12 +41,12 @@ type Job struct {
 	// FCLID      string    `gorm:"column:FCLID;" json:"fclid"  form:"fclid" `
 	// FCLUPDAPP  string    `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
 	// FCMANFLAG  string    `gorm:"column:FCMANFLAG;" json:"fcmanflag"  form:"fcmanflag" `
-	FCNAME     string    `gorm:"column:FCNAME;" json:"fcname"  form:"fcname" `
-	FCNAME2    string    `gorm:"column:FCNAME2;" json:"fcname2"  form:"fcname2" `
+	FCNAME  string `gorm:"column:FCNAME;" json:"fcname"  form:"fcname" `
+	FCNAME2 string `gorm:"column:FCNAME2;" json:"fcname2"  form:"fcname2" `
 	// FCORGCODE  string    `gorm:"column:FCORGCODE;" json:"fcorgcode"  form:"fcorgcode" `
 	// FCPROJ     string    `gorm:"column:FCPROJ;" json:"fcproj"  form:"fcproj" `
 	// FCSELTAG   string    `gorm:"column:FCSELTAG;" json:"fcseltag"  form:"fcseltag" `
-	FCSKID     string    `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"  form:"fcskid" `
+	FCSKID string `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"  form:"fcskid" `
 	// FCSRCUPD   string    `gorm:"column:FCSRCUPD;" json:"fcsrcupd"  form:"fcsrcupd" `
 	// FCSTATUS   string    `gorm:"column:FCSTATUS;" json:"fcstatus"  form:"fcstatus" `
 	// FCU1ACC    string    `gorm:"column:FCU1ACC;" json:"fcu1acc"  form:"fcu1acc" `
@@ -81,7 +81,7 @@ type Job struct {
 	// FNU8CNT    float64   `gorm:"column:FNU8CNT;" json:"fnu8cnt"  form:"fnu8cnt" `
 	// FNU9CNT    float64   `gorm:"column:FNU9CNT;" json:"fnu9cnt"  form:"fnu9cnt" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT time.Time    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTSRCUPD   time.Time `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" default:"now"`
 }
@@ -91,7 +91,7 @@ func (Job) TableName() string {
 }
 
 func (obj *Job) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

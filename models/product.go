@@ -212,8 +212,8 @@ func (Product) TableName() string {
 }
 
 func (obj *Product) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }
 
@@ -283,8 +283,8 @@ func (ProductType) TableName() string {
 }
 
 func (obj *ProductType) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }
 
@@ -364,7 +364,7 @@ func (Unit) TableName() string {
 }
 
 func (obj *Unit) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }

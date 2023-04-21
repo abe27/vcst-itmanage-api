@@ -40,6 +40,59 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
+	if c.Query("fcrftype") != "" && c.Query("fddate") != "" {
+		var gl []models.Glref
+		if err := db.Scopes(services.Paginate(c)).
+			Order("FCCODE").
+			Preload("Corp").
+			Preload("Branch").
+			Preload("Dept").
+			Preload("Sect").
+			Preload("Job").
+			Preload("Glhead").
+			Preload("Book").
+			Preload("Coor").
+			Preload("CreatedBy").
+			Preload("UpdatedBy").
+			Preload("VatCoor").
+			Preload("Proj").
+			Preload("DeliveryToCoor").
+			Where("FDDATE", c.Query("fddate")).
+			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
+
+		r.Data = &gl
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
+	if c.Query("fcrftype") != "" {
+		var gl []models.Glref
+		if err := db.Scopes(services.Paginate(c)).
+			Order("FCCODE").
+			Preload("Corp").
+			Preload("Branch").
+			Preload("Dept").
+			Preload("Sect").
+			Preload("Job").
+			Preload("Glhead").
+			Preload("Book").
+			Preload("Coor").
+			Preload("CreatedBy").
+			Preload("UpdatedBy").
+			Preload("VatCoor").
+			Preload("Proj").
+			Preload("DeliveryToCoor").
+			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
+
+		r.Data = &gl
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
 	var gl []models.Glref
 	if err := db.Scopes(services.Paginate(c)).
 		Preload("Corp").

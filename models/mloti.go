@@ -85,7 +85,7 @@ func (Mloti) TableName() string {
 }
 
 func (obj *Mloti) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := g.New(8)
-	obj.FCSKID = id
+	id, _ := g.New(6)
+	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
 }
