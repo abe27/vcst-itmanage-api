@@ -80,7 +80,7 @@ func (Emzone) TableName() string {
 	return "EMZONE"
 }
 
-fid, _ := g.New(6) BeforeCreate(tx *gorm.DB) (err error) {
+func (obj *Emzone) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(8)
 	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return

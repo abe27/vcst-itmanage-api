@@ -1,6 +1,7 @@
 package models
 
 import (
+    "fmt"
 	g "github.com/matoous/go-nanoid/v2"
 	"gorm.io/gorm"
 )

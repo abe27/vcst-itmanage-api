@@ -70,7 +70,7 @@ func (Estboqi) TableName() string {
 	return "ESTBOQI"
 }
 
-fid, _ := g.New(6)) BeforeCreate(tx *gorm.DB) (err error) {
+func (obj *Estboqi) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(8)
 	obj.FCSKID = fmt.Sprintf("AB%s", id)
 	return
