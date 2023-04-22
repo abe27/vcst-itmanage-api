@@ -161,7 +161,7 @@ type Glref struct {
 	// FMDOCFLOW      string     `gorm:"column:FMDOCFLOW;" json:"fmdocflow"  form:"fmdocflow" `
 	// FMERRMSG       string     `gorm:"column:FMERRMSG;" json:"fmerrmsg"  form:"fmerrmsg" `
 	// FMEXTRATAG     string     `gorm:"column:FMEXTRATAG;" json:"fmextratag"  form:"fmextratag" `
-	// FMMEMDATA      string     `gorm:"column:FMMEMDATA;" json:"fmmemdata"  form:"fmmemdata" `
+	FMMEMDATA string `gorm:"column:FMMEMDATA;" json:"fmmemdata"  form:"fmmemdata" `
 	// FMMEMDATA2     string     `gorm:"column:FMMEMDATA2;" json:"fmmemdata2"  form:"fmmemdata2" `
 	// FMMEMDATA3     string     `gorm:"column:FMMEMDATA3;" json:"fmmemdata3"  form:"fmmemdata3" `
 	// FMMEMDATA4     string     `gorm:"column:FMMEMDATA4;" json:"fmmemdata4"  form:"fmmemdata4" `
@@ -237,6 +237,8 @@ type Glref struct {
 	Glhead         *Glhead `gorm:"foreignKey:FCGLHEAD;references:FCSKID;" json:"glhead"`
 	Book           *Book   `gorm:"foreignKey:FCBOOK;references:FCSKID;" json:"book"`
 	Coor           *Coor   `gorm:"foreignKey:FCCOOR;reference:FCSKID;" json:"coor"`
+	FromWhouse     *WHouse `gorm:"foreignKey:FCFRWHOUSE;reference:FCSKID;" json:"from"`
+	ToWhouse       *WHouse `gorm:"foreignKey:FCTOWHOUSE;reference:FCSKID;" json:"to"`
 	CreatedBy      *Empl   `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
 	UpdatedBy      *Empl   `gorm:"foreignKey:FCCORRECTB;references:FCSKID;" json:"updated_by"`
 	VatCoor        *Coor   `gorm:"foreignKey:FCVATCOOR;reference:FCSKID;" json:"vat_coor"`
@@ -267,6 +269,7 @@ type GlRefForm struct {
 	FCREFTYPE  string       `json:"fcreftype"  form:"fcreftype" `
 	FCRFTYPE   string       `json:"fcrftype"  form:"fcrftype" `
 	FCSTEP     string       `json:"fcstep"  form:"fcstep" default:"I"`
+	FCREMARK   string       `json:"fcremark" form:"fcremark"`
 	FDDATE     time.Time    `json:"fddate"  form:"fddate" default:"now"`
 	FNAFTDEP   float64      `json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
 	FNAFTDEPKE float64      `json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`

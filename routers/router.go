@@ -86,12 +86,15 @@ func SetupRouter(r *fiber.App) {
 	stockWhs.Put("/:id", c.WHousePutController)
 	stockWhs.Delete("/:id", c.WHouseDeleteController)
 
-    glRef := auth.Group("/gl")
+	glRef := auth.Group("/gl")
 	glRefHeader := glRef.Group("/ref")
 	glRefHeader.Get("", c.GlrefHeaderGetController)
 	glRefHeader.Post("", c.GlrefHeaderPostController)
 	glRefHeader.Put("/:id", c.GlrefHeaderPutController)
 	glRefHeader.Delete("/:id", c.GlrefHeaderDeleteController)
+
+	glRefProd := glRef.Group("/prod")
+	glRefProd.Get("", c.RefProdGetController)
 
 	// orderDetail := order.Group("/detail")
 	// orderDetail.Get("", c.OrderDetailGetController)
@@ -124,5 +127,4 @@ func SetupRouter(r *fiber.App) {
 	orderDetail.Put("/:id", c.OrderDetailPutController)
 	orderDetail.Delete("/:id", c.OrderDetailDeleteController)
 
-    
 }

@@ -27,6 +27,8 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("Glhead").
 			Preload("Book").
 			Preload("Coor").
+			Preload("FromWhouse").
+			Preload("ToWhouse").
 			Preload("CreatedBy").
 			Preload("UpdatedBy").
 			Preload("VatCoor").
@@ -53,6 +55,8 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("Glhead").
 			Preload("Book").
 			Preload("Coor").
+			Preload("FromWhouse").
+			Preload("ToWhouse").
 			Preload("CreatedBy").
 			Preload("UpdatedBy").
 			Preload("VatCoor").
@@ -80,6 +84,8 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("Glhead").
 			Preload("Book").
 			Preload("Coor").
+			Preload("FromWhouse").
+			Preload("ToWhouse").
 			Preload("CreatedBy").
 			Preload("UpdatedBy").
 			Preload("VatCoor").
@@ -96,6 +102,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 
 	var gl []models.Glref
 	if err := db.Scopes(services.Paginate(c)).
+		Order("FTLASTUPD").
 		Preload("Corp").
 		Preload("Branch").
 		Preload("Dept").
@@ -104,6 +111,8 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		Preload("Glhead").
 		Preload("Book").
 		Preload("Coor").
+		Preload("FromWhouse").
+		Preload("ToWhouse").
 		Preload("CreatedBy").
 		Preload("UpdatedBy").
 		Preload("VatCoor").
@@ -204,6 +213,10 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 		glref.FCFRWHOUSE = book.FCWHOUSE
 	}
 	glref.FCTOWHOUSE = whs.FCSKID
+	if frm.FCREMARK != "" {
+		// glref.FMMEMDATA = fmt.Sprintf("Rem%sRem", frm.FCREMARK)
+		glref.FMMEMDATA = frm.FCREMARK
+	}
 	glref.FIMILLISEC = time.Now().Unix()
 	glref.FTDATETIME = time.Now()
 	glref.FTLASTEDIT = time.Now()
