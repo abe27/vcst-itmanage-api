@@ -39,7 +39,7 @@ func RegisterController(c *fiber.Ctx) error {
 	}
 
 	var department models.Department
-	if err := db.Select("id").First(&department, &models.Department{Title: frm.DepartmentID}).Error; err != nil {
+	if err := db.Select("id").First(&department, &models.Department{Title: frm.DepartmentID, Company: frm.WhsID}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}

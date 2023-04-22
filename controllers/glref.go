@@ -119,7 +119,6 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 }
 
 func GlrefHeaderPostController(c *fiber.Ctx) error {
-	db := WHSDb(c)
 	var r models.Response
 	r.Message = "Post"
 	var frm models.GlRefForm
@@ -128,8 +127,29 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(&r)
 	}
 
+	s := c.Get("Authorization")
+	token := strings.TrimPrefix(s, "Bearer ")
+	user_id, er := services.ValidateToken(token)
+	if er != nil {
+		r.Message = "Token is Expired"
+		return c.Status(fiber.StatusUnauthorized).JSON(&r)
+	}
+
+	var user models.User
+	if err := configs.Store.Select("DepartmentID").Preload("Department").First(&user, &models.User{ID: fmt.Sprintf("%s", user_id)}).Error; err != nil {
+		r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+
+	db := WHSDb(c)
 	// Begin transaction
 	tx := db.Begin()
+	var sec models.Sect
+	if err := tx.First(&sec, &models.Sect{FCDEPT: user.Department.Code}).Error; err != nil {
+		r.Message = fmt.Sprintf("%s %s", user.Department.Code, err.Error())
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+
 	var whs models.Whouse
 	if err := tx.Select("FCSKID").First(&whs, &models.Whouse{FCCODE: frm.FCWHOUSE}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
@@ -143,7 +163,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var book models.Book
-	if err := tx.Select("FCSKID,FCWHOUSE,FCPREFIX,FCCORP,FCNAME").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
+	if err := tx.Select("FCSKID,FCWHOUSE,FCPREFIX,FCCORP,FCNAME,FCJOB").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCBOOK, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -174,7 +194,11 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FDDATE = frm.FDDATE
 	glref.FCBRANCH = branch.FCSKID
 	glref.FNAMT = fcamt
+	glref.FCJOB = book.FCJOB
+	glref.FCCOOR = sec.FCCODE
 	glref.FCCORP = book.FCCORP
+	glref.FCDEPT = sec.FCDEPT
+	glref.FCSECT = sec.FCSKID
 	glref.FCBOOK = book.FCSKID
 	if book.FCWHOUSE != "" {
 		glref.FCFRWHOUSE = book.FCWHOUSE
@@ -212,11 +236,14 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			refProd.FCRFTYPE = glref.FCRFTYPE
 			refProd.FCREFTYPE = glref.FCREFTYPE
 			refProd.FCPRODTYPE = v.FCPRTYPE
-			refProd.FCCORP = v.FCCORP
+			refProd.FCCORP = book.FCCORP
 			refProd.FCBRANCH = branch.FCSKID
 			refProd.FCWHOUSE = whs.FCSKID
-			refProd.FCSECT = v.FCSECT
+			refProd.FCJOB = book.FCJOB
+			refProd.FCSECT = sec.FCSKID
+			refProd.FCDEPT = sec.FCDEPT
 			refProd.FCPROD = v.FCSKID
+			refProd.FCPRODTYPE = v.FCPRTYPE
 			refProd.FCUM = v.FCUM
 			refProd.FCUMSTD = v.FCUM
 			refProd.FNUMQTY = float64(i.PACK)
@@ -260,8 +287,8 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	// Commit the transaction in case success
 	tx.Commit()
 	// End
-	msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
-	go services.LineNotify(msg)
+	// msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
+	// go services.LineNotify(msg)
 	r.Data = &glref
 	return c.Status(fiber.StatusCreated).JSON(&r)
 }

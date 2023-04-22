@@ -62,7 +62,7 @@ type Book struct {
 	// FCINCDEC   string    `gorm:"column:FCINCDEC;" json:"fcincdec"  form:"fcincdec" `
 	// FCISBORROW string    `gorm:"column:FCISBORROW;" json:"fcisborrow"  form:"fcisborrow" `
 	// FCISUSED   string    `gorm:"column:FCISUSED;" json:"fcisused"  form:"fcisused" `
-	// FCJOB      string    `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
+	FCJOB string `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
 	// FCLID      string    `gorm:"column:FCLID;" json:"fclid"  form:"fclid" `
 	// FCLOCATION string    `gorm:"column:FCLOCATION;" json:"fclocation"  form:"fclocation" `
 	// FCLUPDAPP  string    `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
