@@ -43,36 +43,41 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
-	if c.Query("fcrftype") != "" && c.Query("fddate") != "" {
-		var gl []models.Glref
-		if err := db.Scopes(services.Paginate(c)).
-			Order("FCCODE").
-			Preload("Corp").
-			Preload("Branch").
-			Preload("Dept").
-			Preload("Sect").
-			Preload("Job").
-			Preload("Glhead").
-			Preload("Book").
-			Preload("Coor").
-			Preload("FromWhouse").
-			Preload("ToWhouse").
-			Preload("CreatedBy").
-			Preload("UpdatedBy").
-			Preload("VatCoor").
-			Preload("Proj").
-			Preload("DeliveryToCoor").
-			Where("FDDATE", c.Query("fddate")).
-			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
-			r.Message = err.Error()
-			return c.Status(fiber.StatusInternalServerError).JSON(&r)
-		}
+	// if c.Query("fcrftype") != "" && c.Query("fddate") != "" {
+	// 	var gl []models.Glref
+	// 	if err := db.Scopes(services.Paginate(c)).
+	// 		Order("FCCODE").
+	// 		Preload("Corp").
+	// 		Preload("Branch").
+	// 		Preload("Dept").
+	// 		Preload("Sect").
+	// 		Preload("Job").
+	// 		Preload("Glhead").
+	// 		Preload("Book").
+	// 		Preload("Coor").
+	// 		Preload("FromWhouse").
+	// 		Preload("ToWhouse").
+	// 		Preload("CreatedBy").
+	// 		Preload("UpdatedBy").
+	// 		Preload("VatCoor").
+	// 		Preload("Proj").
+	// 		Preload("DeliveryToCoor").
+	// 		Where("FDDATE", c.Query("fddate")).
+	// 		Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
+	// 		r.Message = err.Error()
+	// 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	// 	}
 
-		r.Data = &gl
-		return c.Status(fiber.StatusOK).JSON(&r)
-	}
+	// 	r.Data = &gl
+	// 	return c.Status(fiber.StatusOK).JSON(&r)
+	// }
 
 	if c.Query("fcrftype") != "" {
+		filterDate := time.Now().Format("2006-01-02")
+		if c.Query("fddate") != "" {
+			filterDate = c.Query("fddate")
+		}
+
 		var gl []models.Glref
 		if err := db.Scopes(services.Paginate(c)).
 			Order("FCCODE").
@@ -91,6 +96,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("VatCoor").
 			Preload("Proj").
 			Preload("DeliveryToCoor").
+			Where("FDDATE", filterDate).
 			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
@@ -238,6 +244,12 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
+		if v.FCSKID == "" {
+			tx.Rollback()
+			r.Message = "Notfound Prod"
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
+
 		if v.FCSKID != "" {
 			var refProd models.Refprod
 			refProd.FCSEQ = fmt.Sprintf("%03d", seq)
@@ -300,8 +312,8 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	// Commit the transaction in case success
 	tx.Commit()
 	// End
-	// msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
-	// go services.LineNotify(msg)
+	msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
+	go services.LineNotify(msg)
 	r.Data = &glref
 	return c.Status(fiber.StatusCreated).JSON(&r)
 }
