@@ -106,6 +106,39 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
+	if c.Query("fddate") != "" {
+		filterDate := time.Now().Format("2006-01-02")
+		if c.Query("fddate") != "" {
+			filterDate = c.Query("fddate")
+		}
+		var gl []models.Glref
+		if err := db.Scopes(services.Paginate(c)).
+			Order("FCCODE").
+			Preload("Corp").
+			Preload("Branch").
+			Preload("Dept").
+			Preload("Sect").
+			Preload("Job").
+			Preload("Glhead").
+			Preload("Book").
+			Preload("Coor").
+			Preload("FromWhouse").
+			Preload("ToWhouse").
+			Preload("CreatedBy").
+			Preload("UpdatedBy").
+			Preload("VatCoor").
+			Preload("Proj").
+			Preload("DeliveryToCoor").
+			Where("FDDATE", filterDate).
+			Find(&gl).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
+
+		r.Data = &gl
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
 	var gl []models.Glref
 	if err := db.Scopes(services.Paginate(c)).
 		Order("FTLASTUPD").
@@ -165,11 +198,11 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
-	var whs models.Whouse
-	if err := tx.Select("FCSKID").First(&whs, &models.Whouse{FCCODE: frm.FCWHOUSE}).Error; err != nil {
-		r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
-		return c.Status(fiber.StatusNotFound).JSON(&r)
-	}
+	// var whs models.Whouse
+	// if err := tx.Select("FCSKID").First(&whs, &models.Whouse{FCCODE: frm.FCWHOUSE}).Error; err != nil {
+	// 	r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
+	// 	return c.Status(fiber.StatusNotFound).JSON(&r)
+	// }
 
 	var branch models.Branch
 	if err := tx.Select("FCSKID").First(&branch, &models.Branch{FCCODE: frm.FCBRANCH}).Error; err != nil {
@@ -178,17 +211,17 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var book models.Book
-	if err := tx.Select("FCSKID,FCWHOUSE,FCPREFIX,FCCORP,FCNAME,FCJOB").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
+	if err := tx.First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCBOOK, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
 	var rnn int64
-	if err := tx.Select("FCCODE").Where("FCREFTYPE", frm.FCREFTYPE).Where("FCCODE LIKE ?", (time.Now().Format("20060102"))[3:6]+"%").Model(&models.Glref{}).Count(&rnn).Error; err != nil {
+	if err := tx.Select("FCCODE").Where("FCCODE LIKE ?", (time.Now().Format("20060102"))[3:6]+"%").Model(&models.Glref{}).Count(&rnn).Error; err != nil {
 		panic(err)
 	}
 
-	frm.FCCODE = fmt.Sprintf("%s%03d", (time.Now().Format("20060102"))[3:6], rnn+1)
+	frm.FCCODE = fmt.Sprintf("%s%04d", (time.Now().Format("20060102"))[3:6], (rnn + 1))
 	frm.FCREFNO = strings.ReplaceAll(fmt.Sprintf("%s%s", book.FCPREFIX, frm.FCCODE), " ", "")
 	frm.FCGID, _ = g.New(26)
 
@@ -203,8 +236,12 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FCCODE = frm.FCCODE
 	glref.FCGID = frm.FCGID
 	glref.FCREFNO = frm.FCREFNO
-	glref.FCREFTYPE = frm.FCREFTYPE
-	glref.FCRFTYPE = frm.FCRFTYPE
+	glref.FCREFTYPE = book.FCREFTYPE
+	fcrfType := "G"
+	if book.FCREFTYPE != "FR" {
+		fcrfType = book.FCREFTYPE[:1]
+	}
+	glref.FCRFTYPE = fcrfType
 	glref.FCSTEP = frm.FCSTEP
 	glref.FDDATE = frm.FDDATE
 	glref.FCBRANCH = branch.FCSKID
@@ -215,10 +252,28 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FCDEPT = sec.FCDEPT
 	glref.FCSECT = sec.FCSKID
 	glref.FCBOOK = book.FCSKID
-	if book.FCWHOUSE != "" {
-		glref.FCFRWHOUSE = book.FCWHOUSE
+
+	// Form WHS
+	var glWhs models.WHouse
+	if err := tx.Select("FCSKID").First(&glWhs, &models.WHouse{FCCODE: "YYY"}).Error; err != nil {
+		tx.Rollback()
+		r.Message = fmt.Sprintf("Not Found YYY := %s", err.Error())
+		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
-	glref.FCTOWHOUSE = whs.FCSKID
+	glref.FCFRWHOUSE = glWhs.FCSKID
+
+	if book.FCWHOUSE != "" {
+		glref.FCTOWHOUSE = book.FCWHOUSE
+	} else {
+		var glToWhs models.WHouse
+		if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: "003"}).Error; err != nil {
+			tx.Rollback()
+			r.Message = fmt.Sprintf("Not Found 003 := %s", err.Error())
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+		glref.FCTOWHOUSE = glToWhs.FCSKID
+	}
+
 	if frm.FCREMARK != "" {
 		// glref.FMMEMDATA = fmt.Sprintf("Rem%sRem", frm.FCREMARK)
 		glref.FMMEMDATA = frm.FCREMARK
@@ -250,6 +305,11 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
 
+		fcWhs := glref.FCFRWHOUSE
+		if frm.FCSTEP == "I" {
+			fcWhs = glref.FCTOWHOUSE
+		}
+
 		if v.FCSKID != "" {
 			var refProd models.Refprod
 			refProd.FCSEQ = fmt.Sprintf("%03d", seq)
@@ -263,7 +323,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			refProd.FCPRODTYPE = v.FCPRTYPE
 			refProd.FCCORP = book.FCCORP
 			refProd.FCBRANCH = branch.FCSKID
-			refProd.FCWHOUSE = whs.FCSKID
+			refProd.FCWHOUSE = fcWhs
 			refProd.FCJOB = book.FCJOB
 			refProd.FCSECT = sec.FCSKID
 			refProd.FCDEPT = sec.FCDEPT
@@ -287,14 +347,22 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			}
 
 			var stock models.Stock
-			tx.First(&stock, &models.Stock{FCPROD: v.FCSKID, FCWHOUSE: whs.FCSKID})
+			tx.First(&stock, &models.Stock{FCPROD: v.FCSKID, FCWHOUSE: fcWhs})
 			stock.FCDATASER = configs.FCDATASER
 			stock.FCCORP = v.FCCORP
 			stock.FCBRANCH = branch.FCSKID
-			stock.FCWHOUSE = whs.FCSKID
+			stock.FCWHOUSE = fcWhs
 			stock.FCPROD = v.FCSKID
 			stock.FDDATE = glref.FDDATE
-			stock.FNQTY = stock.FNQTY + i.QTY
+			switch frm.FCSTEP {
+			case "I":
+				stock.FNQTY = stock.FNQTY + i.QTY
+			default:
+				if stock.FNQTY > 0 {
+					stock.FNQTY = stock.FNQTY - i.QTY
+				}
+			}
+
 			if stock.FCSKID == "" {
 				stock.FTDATETIME = time.Now()
 			}
