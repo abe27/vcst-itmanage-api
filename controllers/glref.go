@@ -43,34 +43,35 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
-	// if c.Query("fcrftype") != "" && c.Query("fddate") != "" {
-	// 	var gl []models.Glref
-	// 	if err := db.Scopes(services.Paginate(c)).
-	// 		Order("FCCODE").
-	// 		Preload("Corp").
-	// 		Preload("Branch").
-	// 		Preload("Dept").
-	// 		Preload("Sect").
-	// 		Preload("Job").
-	// 		Preload("Glhead").
-	// 		Preload("Book").
-	// 		Preload("Coor").
-	// 		Preload("FromWhouse").
-	// 		Preload("ToWhouse").
-	// 		Preload("CreatedBy").
-	// 		Preload("UpdatedBy").
-	// 		Preload("VatCoor").
-	// 		Preload("Proj").
-	// 		Preload("DeliveryToCoor").
-	// 		Where("FDDATE", c.Query("fddate")).
-	// 		Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
-	// 		r.Message = err.Error()
-	// 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
-	// 	}
+	if c.Query("filterGlrefNo") != "" && c.Query("fddate") != "" {
+		var gl []models.Glref
+		if err := db.Scopes(services.Paginate(c)).
+			Order("FCCODE").
+			Preload("Corp").
+			Preload("Branch").
+			Preload("Dept").
+			Preload("Sect").
+			Preload("Job").
+			Preload("Glhead").
+			Preload("Book").
+			Preload("Coor").
+			Preload("FromWhouse").
+			Preload("ToWhouse").
+			Preload("CreatedBy").
+			Preload("UpdatedBy").
+			Preload("VatCoor").
+			Preload("Proj").
+			Preload("DeliveryToCoor").
+			Where("FDDATE", c.Query("fddate")).
+			Where("FCREFNO LIKE ?", "%"+strings.ToUpper(c.Query("filterGlrefNo"))+"%").
+			Find(&gl).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
 
-	// 	r.Data = &gl
-	// 	return c.Status(fiber.StatusOK).JSON(&r)
-	// }
+		r.Data = &gl
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
 
 	if c.Query("fcrftype") != "" {
 		filterDate := time.Now().Format("2006-01-02")
@@ -217,11 +218,11 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var rnn int64
-	if err := tx.Select("FCCODE").Where("FCCODE LIKE ?", (time.Now().Format("20060102"))[3:6]+"%").Model(&models.Glref{}).Count(&rnn).Error; err != nil {
+	if err := tx.Select("FCCODE").Where("FCCODE LIKE ?", (time.Now().Format("20060102"))[2:6]+"%").Model(&models.Glref{}).Count(&rnn).Error; err != nil {
 		panic(err)
 	}
 
-	frm.FCCODE = fmt.Sprintf("%s%04d", (time.Now().Format("20060102"))[3:6], (rnn + 1))
+	frm.FCCODE = fmt.Sprintf("%s%04d", (time.Now().Format("20060102"))[2:6], (rnn + 1))
 	frm.FCREFNO = strings.ReplaceAll(fmt.Sprintf("%s%s", book.FCPREFIX, frm.FCCODE), " ", "")
 	frm.FCGID, _ = g.New(26)
 
