@@ -229,21 +229,6 @@ type Glref struct {
 	// FTRECEIVE      string     `gorm:"column:FTRECEIVE;" json:"ftreceive"  form:"ftreceive" `
 	// FTSRCUPD       string     `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `
 	// FTXFER         string     `gorm:"column:FTXFER;" json:"ftxfer"  form:"ftxfer" `
-	Corp           *Corp   `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`
-	Branch         *Branch `gorm:"foreignKey:FCBRANCH;references:FCSKID;" json:"branch"`
-	Dept           *Dept   `gorm:"foreignKey:FCDEPT;references:FCSKID;" json:"department"`
-	Sect           *Sect   `gorm:"foreignKey:FCSECT;references:FCSKID;" json:"section"`
-	Job            *Job    `gorm:"foreignKey:FCJOB;references:FCSKID;" json:"job"`
-	Glhead         *Glhead `gorm:"foreignKey:FCGLHEAD;references:FCSKID;" json:"glhead"`
-	Book           *Book   `gorm:"foreignKey:FCBOOK;references:FCSKID;" json:"book"`
-	Coor           *Coor   `gorm:"foreignKey:FCCOOR;reference:FCSKID;" json:"coor"`
-	FromWhouse     *WHouse `gorm:"foreignKey:FCFRWHOUSE;reference:FCSKID;" json:"from"`
-	ToWhouse       *WHouse `gorm:"foreignKey:FCTOWHOUSE;reference:FCSKID;" json:"to"`
-	CreatedBy      *Empl   `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
-	UpdatedBy      *Empl   `gorm:"foreignKey:FCCORRECTB;references:FCSKID;" json:"updated_by"`
-	VatCoor        *Coor   `gorm:"foreignKey:FCVATCOOR;reference:FCSKID;" json:"vat_coor"`
-	Proj           *Proj   `gorm:"foreignKey:FCPROJ;reference:FCSKID;" json:"proj"`
-	DeliveryToCoor *Coor   `gorm:"foreignKey:FCDELICOOR;reference:FCSKID;" json:"delivery_to_coor"`
 }
 
 func (Glref) TableName() string {
@@ -254,6 +239,65 @@ func (obj *Glref) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
 	obj.FCSKID = fmt.Sprintf("G%sF", id)
 	return
+}
+
+type GlrefTable struct {
+	FCATSTEP       string    `gorm:"column:FCATSTEP;" json:"fcatstep"  form:"fcatstep" `
+	FCBOOK         string    `gorm:"column:FCBOOK;" json:"fcbook"  form:"fcbook" `
+	FCBRANCH       string    `gorm:"column:FCBRANCH;" json:"fcbranch"  form:"fcbranch" `
+	FCCODE         string    `gorm:"column:FCCODE;" json:"fccode"  form:"fccode" `
+	FCCOOR         string    `gorm:"column:FCCOOR;" json:"fccoor"  form:"fccoor" `
+	FCCORP         string    `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
+	FCCORRECTB     string    `gorm:"column:FCCORRECTB;" json:"fccorrectb"  form:"fccorrectb" `
+	FCCREATEBY     string    `gorm:"column:FCCREATEBY;" json:"fccreateby"  form:"fccreateby" `
+	FCCREATETY     string    `gorm:"column:FCCREATETY;" json:"fccreatety"  form:"fccreatety" `
+	FCDATASER      string    `gorm:"column:FCDATASER;" json:"fcdataser"  form:"fcdataser" default:"$$$+"`
+	FCDELICOOR     string    `gorm:"column:FCDELICOOR;" json:"fcdelicoor"  form:"fcdelicoor" `
+	FCDEPT         string    `gorm:"column:FCDEPT;" json:"fcdept"  form:"fcdept" `
+	FCEAFTERR      string    `gorm:"column:FCEAFTERR;" json:"fceafterr"  form:"fceafterr" `
+	FCFRWHOUSE     string    `gorm:"column:FCFRWHOUSE;" json:"fcfrwhouse"  form:"fcfrwhouse" `
+	FCGID          string    `gorm:"column:FCGID;" json:"fcgid"  form:"fcgid" `
+	FCGLHEAD       string    `gorm:"column:FCGLHEAD;" json:"fcglhead"  form:"fcglhead" `
+	FCJOB          string    `gorm:"column:FCJOB;" json:"fcjob"  form:"fcjob" `
+	FCPROJ         string    `gorm:"column:FCPROJ;" json:"fcproj"  form:"fcproj" `
+	FCREFNO        string    `gorm:"column:FCREFNO;" json:"fcrefno"  form:"fcrefno" `
+	FCREFTYPE      string    `gorm:"column:FCREFTYPE;" json:"fcreftype"  form:"fcreftype" `
+	FCRFTYPE       string    `gorm:"column:FCRFTYPE;" json:"fcrftype"  form:"fcrftype" `
+	FCSECT         string    `gorm:"column:FCSECT;" json:"fcsect"  form:"fcsect" `
+	FCSKID         string    `gorm:"primaryKey;column:FCSKID;size:8;unique;index;" json:"fcskid"`
+	FCSTEP         string    `gorm:"column:FCSTEP;" json:"fcstep"  form:"fcstep" default:"I"`
+	FCTOWHOUSE     string    `gorm:"column:FCTOWHOUSE;" json:"fctowhouse"  form:"fctowhouse" `
+	FCVATCOOR      string    `gorm:"column:FCVATCOOR;" json:"fcvatcoor"  form:"fcvatcoor" `
+	FDDATE         time.Time `gorm:"column:FDDATE;" json:"fddate"  form:"fddate" default:"now"`
+	FIMILLISEC     int64     `gorm:"column:FIMILLISEC;" json:"fimillisec"  form:"fimillisec" `
+	FNAFTDEP       float64   `gorm:"column:FNAFTDEP;" json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
+	FNAFTDEPKE     float64   `gorm:"column:FNAFTDEPKE;" json:"fnaftdepke"  form:"fnaftdepke" defualt:"0"`
+	FNAMT          float64   `gorm:"column:FNAMT;" json:"fnamt"  form:"fnamt" `
+	FTDATETIME     time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
+	FTLASTEDIT     time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
+	FTLASTUPD      time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
+	FCLUPDAPP      string    `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
+	FMMEMDATA      string    `gorm:"column:FMMEMDATA;" json:"fmmemdata"  form:"fmmemdata" `
+	FCSTATUS       bool      `json:"fcstatus" default:"false"`
+	Corp           *Corp     `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`
+	Branch         *Branch   `gorm:"foreignKey:FCBRANCH;references:FCSKID;" json:"branch"`
+	Dept           *Dept     `gorm:"foreignKey:FCDEPT;references:FCSKID;" json:"department"`
+	Sect           *Sect     `gorm:"foreignKey:FCSECT;references:FCSKID;" json:"section"`
+	Job            *Job      `gorm:"foreignKey:FCJOB;references:FCSKID;" json:"job"`
+	Glhead         *Glhead   `gorm:"foreignKey:FCGLHEAD;references:FCSKID;" json:"glhead"`
+	Book           *Book     `gorm:"foreignKey:FCBOOK;references:FCSKID;" json:"book"`
+	Coor           *Coor     `gorm:"foreignKey:FCCOOR;reference:FCSKID;" json:"coor"`
+	FromWhouse     *WHouse   `gorm:"foreignKey:FCFRWHOUSE;reference:FCSKID;" json:"from"`
+	ToWhouse       *WHouse   `gorm:"foreignKey:FCTOWHOUSE;reference:FCSKID;" json:"to"`
+	CreatedBy      *Empl     `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
+	UpdatedBy      *Empl     `gorm:"foreignKey:FCCORRECTB;references:FCSKID;" json:"updated_by"`
+	VatCoor        *Coor     `gorm:"foreignKey:FCVATCOOR;reference:FCSKID;" json:"vat_coor"`
+	Proj           *Proj     `gorm:"foreignKey:FCPROJ;reference:FCSKID;" json:"proj"`
+	DeliveryToCoor *Coor     `gorm:"foreignKey:FCDELICOOR;reference:FCSKID;" json:"delivery_to_coor"`
+}
+
+func (GlrefTable) TableName() string {
+	return "GLREF"
 }
 
 type GlRefForm struct {
@@ -277,18 +321,18 @@ type GlRefForm struct {
 }
 
 type GlrefHistory struct {
-	FCCODE     string    `json:"fccode" form:"fccode"`
-	FCGID      string    `json:"fcgid" form:"fcgid"`
-	FCREFNO    string    `json:"fcrefno" form:"fcrefno"`
-	FCREFTYPE  string    `json:"fcreftype" form:"fcreftype"`
-	FCRFTYPE   string    `json:"fcretype"`
-	FCSTEP     string    `json:"fcstep"`
-	FDDATE     string    `json:"fddate"`
-	FCBRANCH   string    `json:"fcbranch"`
-	FNAMT      float64   `json:"fnamt"`
-	FCFRWHOUSE string    `json:"fcfrwhouse"`
-	FCTOWHOUSE string    `json:"fctowhouse"`
-	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
-	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" default:"now"`
-	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
+	ID           string    `gorm:"size:21;primaryKey;not null;" json:"id"`
+	FCSKID       string    `json:"fcskid"`
+	OLDREFNO     string    `json:"oldrefno"`
+	IsComplete   bool      `json:"is_complete"`
+	UpdateByID   string    `json:"update_by_id"`
+	UpdateByUser *User     `gorm:"foreignKey:UpdateByID;reference:ID;" json:"update_by"`
+	CreatedAt    time.Time `json:"created_at" default:"now"`
+	UpdatedAt    time.Time `json:"updated_at" default:"now"`
+}
+
+func (obj *GlrefHistory) BeforeCreate(tx *gorm.DB) (err error) {
+	id, _ := g.New(21)
+	obj.ID = id
+	return
 }

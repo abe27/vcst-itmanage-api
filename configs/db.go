@@ -9,17 +9,17 @@ import (
 )
 
 var (
-	Store            *gorm.DB
-	StoreAAA         *gorm.DB
-	StoreFormulaAAA  *gorm.DB
-	StoreBVS         *gorm.DB
-	StoreFormulaBVS  *gorm.DB
-	StoreVCS         *gorm.DB
-	StoreFormulaVCS  *gorm.DB
-	StoreVCST        *gorm.DB
-	StoreFormulaVCST *gorm.DB
-    FCDATASER string
-    LINE_NOTIFY_TOKEN string
+	Store             *gorm.DB
+	StoreAAA          *gorm.DB
+	StoreFormulaAAA   *gorm.DB
+	StoreBVS          *gorm.DB
+	StoreFormulaBVS   *gorm.DB
+	StoreVCS          *gorm.DB
+	StoreFormulaVCS   *gorm.DB
+	StoreVCST         *gorm.DB
+	StoreFormulaVCST  *gorm.DB
+	FCDATASER         string
+	LINE_NOTIFY_TOKEN string
 )
 
 func InitDB() {
@@ -66,6 +66,10 @@ func InitDB() {
 
 	if !Store.Migrator().HasTable(&models.ActivityLogging{}) {
 		Store.AutoMigrate(&models.ActivityLogging{})
+	}
+
+	if !Store.Migrator().HasTable(&models.GlrefHistory{}) {
+		Store.AutoMigrate(&models.GlrefHistory{})
 	}
 
 	// if !Store.Migrator().HasTable(&models.BillingDocument{}) {

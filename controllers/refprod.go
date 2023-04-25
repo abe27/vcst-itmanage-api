@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/abe27/vcst/api.v1/configs"
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
@@ -37,12 +38,19 @@ func RefProdGetController(c *fiber.Ctx) error {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
+
+		var isCompleted int64
+		if err := configs.Store.Select("id").Find(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: refProd.Glref.FCSKID}).Count(&isCompleted).Error; err != nil {
+			refProd.Glref.FCSTATUS = false
+		}
+		refProd.Glref.FCSTATUS = isCompleted > 0
 		r.Data = &refProd
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
+	var refProdTable []models.Refprod
+	var refProd []models.Refprod
 	if c.Query("glref_id") != "" {
-		var refProd []models.Refprod
 		if err := db.
 			Order("FCSEQ").
 			Preload("Corp").
@@ -68,15 +76,34 @@ func RefProdGetController(c *fiber.Ctx) error {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
-		r.Data = &refProd
+
+		for _, x := range refProd {
+			var isCompleted int64
+			if err := configs.Store.Select("id").Find(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.Glref.FCSKID}).Count(&isCompleted).Error; err != nil {
+				x.Glref.FCSTATUS = false
+			}
+			x.Glref.FCSTATUS = isCompleted > 0
+			refProdTable = append(refProdTable, x)
+		}
+
+		r.Data = &refProdTable
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
-	var refProd []models.Refprod
 	if err := db.Scopes(services.Paginate(c)).Find(&refProd).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
-	r.Data = &refProd
+
+	for _, x := range refProd {
+		var isCompleted int64
+		if err := configs.Store.Select("id").Find(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.Glref.FCSKID}).Count(&isCompleted).Error; err != nil {
+			x.Glref.FCSTATUS = false
+		}
+		x.Glref.FCSTATUS = isCompleted > 0
+		refProdTable = append(refProdTable, x)
+	}
+
+	r.Data = &refProdTable
 	return c.Status(fiber.StatusOK).JSON(&r)
 }

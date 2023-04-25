@@ -17,7 +17,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 	var r models.Response
 	r.Message = "Get"
 	if c.Query("id") != "" {
-		var gl models.Glref
+		var gl models.GlrefTable
 		if err := db.
 			Preload("Corp").
 			Preload("Branch").
@@ -39,12 +39,18 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
+		var isComplete int64
+		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: gl.FCSKID}).Count(&isComplete).Error; err != nil {
+			gl.FCSTATUS = false
+		}
+		gl.FCSTATUS = isComplete > 0
 		r.Data = &gl
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
+	var glChecked []models.GlrefTable
+	var gl []models.GlrefTable
 	if c.Query("filterGlrefNo") != "" && c.Query("fddate") != "" {
-		var gl []models.Glref
 		if err := db.Scopes(services.Paginate(c)).
 			Order("FCCODE").
 			Preload("Corp").
@@ -69,7 +75,15 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
 
-		r.Data = &gl
+		for _, x := range gl {
+			var isComplete int64
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+				x.FCSTATUS = false
+			}
+			x.FCSTATUS = isComplete > 0
+			glChecked = append(glChecked, x)
+		}
+		r.Data = &glChecked
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
@@ -79,7 +93,6 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			filterDate = c.Query("fddate")
 		}
 
-		var gl []models.Glref
 		if err := db.Scopes(services.Paginate(c)).
 			Order("FCCODE").
 			Preload("Corp").
@@ -103,7 +116,15 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
 
-		r.Data = &gl
+		for _, x := range gl {
+			var isComplete int64
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+				x.FCSTATUS = false
+			}
+			x.FCSTATUS = isComplete > 0
+			glChecked = append(glChecked, x)
+		}
+		r.Data = &glChecked
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
@@ -112,7 +133,6 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		if c.Query("fddate") != "" {
 			filterDate = c.Query("fddate")
 		}
-		var gl []models.Glref
 		if err := db.Scopes(services.Paginate(c)).
 			Order("FCCODE").
 			Preload("Corp").
@@ -136,11 +156,18 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
 
-		r.Data = &gl
+		for _, x := range gl {
+			var isComplete int64
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+				x.FCSTATUS = false
+			}
+			x.FCSTATUS = isComplete > 0
+			glChecked = append(glChecked, x)
+		}
+		r.Data = &glChecked
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
-	var gl []models.Glref
 	if err := db.Scopes(services.Paginate(c)).
 		Order("FTLASTUPD").
 		Preload("Corp").
@@ -163,7 +190,15 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
-	r.Data = &gl
+	for _, x := range gl {
+		var isComplete int64
+		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			x.FCSTATUS = false
+		}
+		x.FCSTATUS = isComplete > 0
+		glChecked = append(glChecked, x)
+	}
+	r.Data = &glChecked
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
 
@@ -408,5 +443,68 @@ func GlrefHeaderDeleteController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
+	return c.Status(fiber.StatusOK).JSON(&r)
+}
+
+func GlrefHeaderTransferController(c *fiber.Ctx) error {
+	var r models.Response
+	var frm models.GlRefForm
+	if err := c.BodyParser(&frm); err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(&r)
+	}
+
+	s := c.Get("Authorization")
+	token := strings.TrimPrefix(s, "Bearer ")
+	user_id, er := services.ValidateToken(token)
+	if er != nil {
+		r.Message = "Token is Expired"
+		return c.Status(fiber.StatusUnauthorized).JSON(&r)
+	}
+
+	db := WHSDb(c)
+	tx := db.Begin()
+	var glref models.Glref
+	var isDuplicate int64
+	if err := tx.Select("FCSKID").Find(&glref, &models.Glref{FCREFNO: frm.FCREFNO}).Count(&isDuplicate).Error; err != nil {
+		tx.Rollback()
+		r.Message = err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	}
+
+	if isDuplicate > 0 {
+		tx.Rollback()
+		r.Message = fmt.Sprintf("%s is duplicate!", strings.ToUpper(frm.FCREFNO))
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	}
+
+	if err := tx.First(&glref, &models.Glref{FCSKID: c.Params("id")}).Error; err != nil {
+		tx.Rollback()
+		r.Message = err.Error()
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+
+	// insert to glref logger
+	var glrefHistory models.GlrefHistory
+	glrefHistory.FCSKID = glref.FCSKID
+	glrefHistory.OLDREFNO = glref.FCREFNO
+	glrefHistory.IsComplete = true
+	glrefHistory.UpdateByID = fmt.Sprintf("%s", user_id)
+	if err := configs.Store.FirstOrCreate(&glrefHistory, &models.GlrefHistory{FCSKID: glref.FCSKID}).Error; err != nil {
+		tx.Rollback()
+		r.Message = er.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	}
+
+	// update glref new invoice
+	glref.FCREFNO = frm.FCREFNO
+	glref.FTLASTUPD = time.Now()
+	glref.FTLASTEDIT = time.Now()
+	if err := tx.Save(&glref).Error; err != nil {
+		tx.Rollback()
+		r.Message = err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	}
+	tx.Commit()
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
