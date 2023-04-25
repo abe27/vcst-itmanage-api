@@ -247,7 +247,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var book models.Book
-	if err := tx.First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
+	if err := tx.Preload("RefType").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCBOOK, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -272,12 +272,9 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FCCODE = frm.FCCODE
 	glref.FCGID = frm.FCGID
 	glref.FCREFNO = frm.FCREFNO
-	glref.FCREFTYPE = book.FCREFTYPE
-	fcrfType := "G"
-	if book.FCREFTYPE != "FR" {
-		fcrfType = book.FCREFTYPE[:1]
-	}
-	glref.FCRFTYPE = fcrfType
+	glref.FCREFTYPE = book.RefType.FCCODE
+	glref.FCLUPDAPP = "$0"
+	glref.FCRFTYPE = book.RefType.FCRFTYPE
 	glref.FCSTEP = frm.FCSTEP
 	glref.FDDATE = frm.FDDATE
 	glref.FCBRANCH = branch.FCSKID

@@ -12,7 +12,17 @@ func BookGetController(c *fiber.Ctx) error {
 	r.Message = "Ok"
 	if c.Query("id") != "" {
 		var book models.Book
-		if err := db.First(&book, &models.Book{FCSKID: c.Query("id")}).Error; err != nil {
+		if err := db.
+			Preload("RefType").
+			Preload("CreatedBy").
+			Preload("Corp").
+			Preload("WHouse").
+			Preload("FromWHouse").
+			Preload("ToWHouse").
+			Preload("Accbook").
+			Preload("Gmodhead").
+			Preload("Branch").
+			First(&book, &models.Book{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
@@ -25,6 +35,7 @@ func BookGetController(c *fiber.Ctx) error {
 		var book []models.Book
 		if err := db.Scopes(services.Paginate(c)).
 			Order("FCCODE").
+			Preload("RefType").
 			Preload("CreatedBy").
 			Preload("Corp").
 			Preload("WHouse").
@@ -49,6 +60,7 @@ func BookGetController(c *fiber.Ctx) error {
 	var book []models.Book
 	if err := db.Scopes(services.Paginate(c)).
 		Order("FCCODE").
+		Preload("RefType").
 		Preload("CreatedBy").
 		Preload("Corp").
 		Preload("WHouse").

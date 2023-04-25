@@ -135,6 +135,7 @@ type Book struct {
 	// FTLASTEDIT time.Time    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
 	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	FTSRCUPD   time.Time `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" default:"now"`
+	RefType    *Reftype  `gorm:"foreignKey:FCREFTYPE;references:FCSKID;" json:"ref_type"`
 	CreatedBy  *Empl     `gorm:"foreignKey:FCCREATEBY;references:FCSKID;" json:"created_by"`
 	Corp       *Corp     `gorm:"foreignKey:FCCORP;references:FCSKID;" json:"corp"`
 	WHouse     *WHouse   `gorm:"foreignKey:FCWHOUSE;references:FCSKID;" json:"whouse"`

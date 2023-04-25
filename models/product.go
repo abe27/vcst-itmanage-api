@@ -1,7 +1,8 @@
 package models
 
 import (
-    "fmt"
+	"fmt"
+
 	g "github.com/matoous/go-nanoid/v2"
 	"gorm.io/gorm"
 )
@@ -13,9 +14,9 @@ type Product struct {
 	// FCUTIME    string `gorm:"column:FCUTIME;" json:"fcutime"  form:"fcutime" `
 	// FCLUPDAPP  string `gorm:"column:FCLUPDAPP;" json:"fclupdapp"  form:"fclupdapp" `
 	// FCBAKYRHIS string `gorm:"column:FCBAKYRHIS;" json:"fcbakyrhis"  form:"fcbakyrhis" `
-	FCCORP string `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
-	FCTYPE string `gorm:"column:FCTYPE;" json:"fctype"  form:"fctype" `
-	// FCPDGRP    string `gorm:"column:FCPDGRP;" json:"fcpdgrp"  form:"fcpdgrp" `
+	FCCORP  string `gorm:"column:FCCORP;" json:"fccorp"  form:"fccorp" `
+	FCTYPE  string `gorm:"column:FCTYPE;" json:"fctype"  form:"fctype" `
+	FCPDGRP string `gorm:"column:FCPDGRP;" json:"fcpdgrp"  form:"fcpdgrp" `
 	// FCBRANCH   string `gorm:"column:FCBRANCH;" json:"fcbranch"  form:"fcbranch" `
 	FCCODE   string `gorm:"column:FCCODE;" json:"fccode"  form:"fccode" `
 	FCSNAME  string `gorm:"column:FCSNAME;" json:"fcsname"  form:"fcsname" `
@@ -204,8 +205,9 @@ type Product struct {
 	// FCORGCODE   string      `gorm:"column:FCORGCODE;" json:"fcorgcode"  form:"fcorgcode" `
 	// FCCUACC     string      `gorm:"column:FCCUACC;" json:"fccuacc"  form:"fccuacc" `
 	// FCAPPNAME   string      `gorm:"column:FCAPPNAME;" json:"fcappname"  form:"fcappname" `
-	ProductType ProductType `gorm:"foreignKey:FCTYPE;references:FCCODE;" json:"product_type"`
-	Unit        Unit        `gorm:"foreignKey:FCUM;references:FCSKID;" json:"product_unit"`
+	ProductGroup Pdgrp       `gorm:"foreignKey:FCPDGRP;references:FCSKID;" json:"product_group"`
+	ProductType  ProductType `gorm:"foreignKey:FCTYPE;references:FCCODE;" json:"product_type"`
+	Unit         Unit        `gorm:"foreignKey:FCUM;references:FCSKID;" json:"product_unit"`
 }
 
 func (Product) TableName() string {

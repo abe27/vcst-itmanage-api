@@ -18,7 +18,7 @@ func ProductGetController(c *fiber.Ctx) error {
 
 	if c.Query("id") != "" {
 		var prod models.Product
-		if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Preload("Unit").First(&prod, &models.Product{FCSKID: c.Query("id"), FCTYPE: prodType}).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).Preload("ProductGroup").Preload("ProductType").Preload("Unit").First(&prod, &models.Product{FCSKID: c.Query("id"), FCTYPE: prodType}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -31,7 +31,7 @@ func ProductGetController(c *fiber.Ctx) error {
 	var prod []models.Product
 	if c.Query("filterNo") != "" {
 		arr := strings.Split(c.Query("type"), ",")
-		if err := db.Scopes(services.Paginate(c)).Order("FCCODE").Preload("ProductType").Preload("Unit").Where("FCTYPE IN ?", arr).Where("FCCODE LIKE ?", strings.ToUpper(c.Query("filterNo"))+"%").Find(&prod).Error; err != nil {
+		if err := db.Scopes(services.Paginate(c)).Order("FCCODE").Preload("ProductGroup").Preload("ProductType").Preload("Unit").Where("FCTYPE IN ?", arr).Where("FCCODE LIKE ?", strings.ToUpper(c.Query("filterNo"))+"%").Find(&prod).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(r)
 		}
@@ -40,7 +40,7 @@ func ProductGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(r)
 	}
 
-	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Preload("Unit").Find(&prod, &models.Product{FCTYPE: prodType}).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).Preload("ProductGroup").Preload("ProductType").Preload("Unit").Find(&prod, &models.Product{FCTYPE: prodType}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
