@@ -52,7 +52,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 	var gl []models.GlrefTable
 	if c.Query("filterGlrefNo") != "" && c.Query("fddate") != "" {
 		if err := db.Scopes(services.Paginate(c)).
-			Order("FCCODE").
+			Order("FCLUPDAPP DESC,FCCODE").
 			Preload("Corp").
 			Preload("Branch").
 			Preload("Dept").
@@ -68,6 +68,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("VatCoor").
 			Preload("Proj").
 			Preload("DeliveryToCoor").
+			Where("FNAMT > ?", 0).
 			Where("FDDATE", c.Query("fddate")).
 			Where("FCREFNO LIKE ?", "%"+strings.ToUpper(c.Query("filterGlrefNo"))+"%").
 			Find(&gl).Error; err != nil {
@@ -94,7 +95,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		}
 
 		if err := db.Scopes(services.Paginate(c)).
-			Order("FCCODE").
+			Order("FCLUPDAPP DESC,FCCODE").
 			Preload("Corp").
 			Preload("Branch").
 			Preload("Dept").
@@ -110,6 +111,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("VatCoor").
 			Preload("Proj").
 			Preload("DeliveryToCoor").
+			Where("FNAMT > ?", 0).
 			Where("FDDATE", filterDate).
 			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
 			r.Message = err.Error()
@@ -134,7 +136,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			filterDate = c.Query("fddate")
 		}
 		if err := db.Scopes(services.Paginate(c)).
-			Order("FCCODE").
+			Order("FCLUPDAPP DESC,FCCODE").
 			Preload("Corp").
 			Preload("Branch").
 			Preload("Dept").
@@ -150,6 +152,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("VatCoor").
 			Preload("Proj").
 			Preload("DeliveryToCoor").
+			Where("FNAMT > ?", 0).
 			Where("FDDATE", filterDate).
 			Find(&gl).Error; err != nil {
 			r.Message = err.Error()
@@ -169,7 +172,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 	}
 
 	if err := db.Scopes(services.Paginate(c)).
-		Order("FTLASTUPD").
+		Order("FCLUPDAPP DESC,FCCODE").
 		Preload("Corp").
 		Preload("Branch").
 		Preload("Dept").
@@ -185,6 +188,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		Preload("VatCoor").
 		Preload("Proj").
 		Preload("DeliveryToCoor").
+		Where("FNAMT > ?", 0).
 		Find(&gl).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
@@ -414,7 +418,12 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	tx.Commit()
 	// End
 	msg := fmt.Sprintf("\nบันทึก%s\nเลขที่: %s \nสินค้า: %d รายการ\nจำนวน: %d\nเรียบร้อยแล้ว\n%s", book.FCNAME, glref.FCREFNO, len(frm.REFPROD), int(fcamt), time.Now().Format("2006-01-02 15:04:05"))
-	go services.LineNotify(msg)
+	var line models.Linenotify
+	if err := configs.Store.First(&line, &models.Linenotify{Jobs: book.FCREFTYPE}).Error; err == nil {
+		if line.Token != "" {
+			go services.LineNotify(line.Token, msg)
+		}
+	}
 	r.Data = &glref
 	return c.Status(fiber.StatusCreated).JSON(&r)
 }

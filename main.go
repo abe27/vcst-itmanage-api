@@ -56,9 +56,14 @@ func init() {
 		DisableAutomaticPing:                     true,
 		DisableForeignKeyConstraintWhenMigrating: false,
 		SkipDefaultTransaction:                   true,
+		// NowFunc: func() time.Time {
+		// 	return time.Now().Local()
+		// }
 		NowFunc: func() time.Time {
-			return time.Now().Local()
-		}}
+			ti, _ := time.LoadLocation("Asia/Bangkok")
+			return time.Now().In(ti)
+		},
+	}
 
 	/// Setup database Master
 	dnsAAA := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_AAA_USERNAME"), os.Getenv("MSSQL_AAA_PASSWORD"), os.Getenv("MSSQL_AAA_HOST"), os.Getenv("MSSQL_AAA_PORT"), os.Getenv("MSSQL_AAA_DBNAME"))

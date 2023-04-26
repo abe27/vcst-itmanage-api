@@ -48,6 +48,12 @@ func SetupRouter(r *fiber.App) {
 	section.Put("/:id", c.SectionPutController)
 	section.Delete("/:id", c.SectionDeleteController)
 
+	lineNotify := auth.Group("/lineNotify")
+	lineNotify.Get("", c.LineNotifyGetController)
+	lineNotify.Post("", c.LineNotifyPostController)
+	lineNotify.Put("/:id", c.LineNotifyPutController)
+	lineNotify.Delete("/:id", c.LineNotifyDeleteController)
+
 	erpUser := auth.Group("/erpUser")
 	erpUser.Get("", c.ErpUserGetController)
 	erpUser.Post("", c.ErpUserPostController)

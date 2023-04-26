@@ -124,3 +124,19 @@ func (obj *ErpUser) BeforeCreate(tx *gorm.DB) (err error) {
 	obj.ID = id
 	return
 }
+
+type Linenotify struct {
+	ID        string    `gorm:"primaryKey;size:21;" json:"id"`
+	Jobs      string    `json:"jobs"`
+	Message   string    `json:"message"`
+	Token     string    `gorm:"unique;index;" json:"token"`
+	IsActive  bool      `gorm:"null" json:"is_active" default:"false"`
+	CreatedAt time.Time `json:"created_at" default:"now"`
+	UpdatedAt time.Time `json:"updated_at" default:"now"`
+}
+
+func (obj *Linenotify) BeforeCreate(tx *gorm.DB) (err error) {
+	id, _ := g.New()
+	obj.ID = id
+	return
+}

@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
-func LineNotify(message string) {
+func LineNotify(token, message string) {
 
 	url := "https://notify-api.line.me/api/notify"
 	method := "POST"
@@ -23,7 +22,7 @@ func LineNotify(message string) {
 		return
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", os.Getenv("LINE_NOTIFY_TOKEN")))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 
 	res, err := client.Do(req)
 	if err != nil {

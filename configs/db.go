@@ -72,6 +72,10 @@ func InitDB() {
 		Store.AutoMigrate(&models.GlrefHistory{})
 	}
 
+	if !Store.Migrator().HasTable(&models.Linenotify{}) {
+		Store.AutoMigrate(&models.Linenotify{})
+	}
+
 	// if !Store.Migrator().HasTable(&models.BillingDocument{}) {
 	// 	Store.AutoMigrate(&models.BillingDocument{})
 	// }
