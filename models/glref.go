@@ -303,7 +303,8 @@ func (GlrefTable) TableName() string {
 type GlRefForm struct {
 	FCBOOK     string       `json:"fcbook" form:"fcbook"`
 	FCBRANCH   string       `json:"fcbranch" form:"fcbranch"`
-	FCWHOUSE   string       `json:"fcwhouse" form:"fcwhouse"`
+	FROMWHOUSE string       `json:"fromwhouse" form:"fromwhouse"`
+	TOWHOUSE   string       `json:"towhouse" form:"towhouse"`
 	FCCODE     string       `json:"fccode"  form:"fccode" `
 	FCGID      string       `json:"fcgid"  form:"fcgid" `
 	FCGLHEAD   string       `json:"fcglhead"  form:"fcglhead" `
@@ -322,8 +323,11 @@ type GlRefForm struct {
 
 type GlrefHistory struct {
 	ID           string    `gorm:"size:21;primaryKey;not null;" json:"id"`
-	FCSKID       string    `json:"fcskid"`
-	OLDREFNO     string    `json:"oldrefno"`
+	GLREF        string    `gorm:"size:8;" json:"glref"`
+	REFPROD      string    `gorm:"size:8;" json:"refprod"`
+	REFNO        string    `gorm:"size:25;" json:"refno"`
+	PRODID       string    `gorm:"size:8;" json:"prodid"`
+	QTY          float64   `json:"qty"`
 	IsComplete   bool      `json:"is_complete"`
 	UpdateByID   string    `json:"update_by_id"`
 	UpdateByUser *User     `gorm:"foreignKey:UpdateByID;reference:ID;" json:"update_by"`

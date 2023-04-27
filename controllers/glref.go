@@ -40,7 +40,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		}
 
 		var isComplete int64
-		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: gl.FCSKID}).Count(&isComplete).Error; err != nil {
+		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: gl.FCSKID}).Count(&isComplete).Error; err != nil {
 			gl.FCSTATUS = false
 		}
 		gl.FCSTATUS = isComplete > 0
@@ -78,7 +78,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 
 		for _, x := range gl {
 			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
 				x.FCSTATUS = false
 			}
 			x.FCSTATUS = isComplete > 0
@@ -120,7 +120,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 
 		for _, x := range gl {
 			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
 				x.FCSTATUS = false
 			}
 			x.FCSTATUS = isComplete > 0
@@ -161,7 +161,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 
 		for _, x := range gl {
 			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
 				x.FCSTATUS = false
 			}
 			x.FCSTATUS = isComplete > 0
@@ -196,7 +196,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 
 	for _, x := range gl {
 		var isComplete int64
-		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{FCSKID: x.FCSKID}).Count(&isComplete).Error; err != nil {
+		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
 			x.FCSTATUS = false
 		}
 		x.FCSTATUS = isComplete > 0
@@ -238,12 +238,6 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
-	// var whs models.Whouse
-	// if err := tx.Select("FCSKID").First(&whs, &models.Whouse{FCCODE: frm.FCWHOUSE}).Error; err != nil {
-	// 	r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
-	// 	return c.Status(fiber.StatusNotFound).JSON(&r)
-	// }
-
 	var branch models.Branch
 	if err := tx.Select("FCSKID").First(&branch, &models.Branch{FCCODE: frm.FCBRANCH}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCBRANCH, err.Error())
@@ -251,7 +245,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	var book models.Book
-	if err := tx.Preload("RefType").First(&book, &models.Book{FCCODE: frm.FCBOOK}).Error; err != nil {
+	if err := tx.Preload("RefType").First(&book, &models.Book{FCCODE: frm.FCBOOK, FCREFTYPE: frm.FCREFTYPE}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", frm.FCBOOK, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -262,7 +256,11 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 
 	frm.FCCODE = fmt.Sprintf("%s%04d", (time.Now().Format("20060102"))[2:6], (rnn + 1))
-	frm.FCREFNO = strings.ReplaceAll(fmt.Sprintf("%s%s", book.FCPREFIX, frm.FCCODE), " ", "")
+	glRefPrefix := "ADJ"
+	if book.FCPREFIX != "" {
+		glRefPrefix = book.FCPREFIX
+	}
+	frm.FCREFNO = strings.ReplaceAll(fmt.Sprintf("%s%s", glRefPrefix, frm.FCCODE), " ", "")
 	frm.FCGID, _ = g.New(26)
 
 	var fcamt float64 = 0
@@ -276,7 +274,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	glref.FCCODE = frm.FCCODE
 	glref.FCGID = frm.FCGID
 	glref.FCREFNO = frm.FCREFNO
-	glref.FCREFTYPE = book.RefType.FCCODE
+	glref.FCREFTYPE = book.FCREFTYPE
 	glref.FCLUPDAPP = "$0"
 	glref.FCRFTYPE = book.RefType.FCRFTYPE
 	glref.FCSTEP = frm.FCSTEP
@@ -292,20 +290,20 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 
 	// Form WHS
 	var glWhs models.WHouse
-	if err := tx.Select("FCSKID").First(&glWhs, &models.WHouse{FCCODE: "YYY"}).Error; err != nil {
+	if err := tx.Select("FCSKID").First(&glWhs, &models.WHouse{FCCODE: frm.FROMWHOUSE}).Error; err != nil {
 		tx.Rollback()
-		r.Message = fmt.Sprintf("Not Found YYY := %s", err.Error())
+		r.Message = fmt.Sprintf("Not Found %s := %s", frm.FROMWHOUSE, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 	glref.FCFRWHOUSE = glWhs.FCSKID
 
-	if book.FCWHOUSE != "" {
+	if strings.ReplaceAll(book.FCWHOUSE, " ", "") != "" {
 		glref.FCTOWHOUSE = book.FCWHOUSE
 	} else {
 		var glToWhs models.WHouse
-		if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: "003"}).Error; err != nil {
+		if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: frm.TOWHOUSE}).Error; err != nil {
 			tx.Rollback()
-			r.Message = fmt.Sprintf("Not Found 003 := %s", err.Error())
+			r.Message = fmt.Sprintf("Not Found %s := %s", frm.TOWHOUSE, err.Error())
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 		glref.FCTOWHOUSE = glToWhs.FCSKID
@@ -355,8 +353,8 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			refProd.FDDATE = glref.FDDATE
 			refProd.FCREFPDTYP = "P"
 			refProd.FCIOTYPE = glref.FCSTEP
-			refProd.FCRFTYPE = glref.FCRFTYPE
-			refProd.FCREFTYPE = glref.FCREFTYPE
+			refProd.FCRFTYPE = book.RefType.FCRFTYPE
+			refProd.FCREFTYPE = book.FCREFTYPE
 			refProd.FCPRODTYPE = v.FCPRTYPE
 			refProd.FCCORP = book.FCCORP
 			refProd.FCBRANCH = branch.FCSKID
@@ -408,6 +406,21 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			if err := tx.Save(&stock).Error; err != nil {
 				tx.Rollback()
 				r.Message = fmt.Sprintf("Failed transection on Stock: %v", err.Error())
+				return c.Status(fiber.StatusInternalServerError).JSON(&r)
+			}
+
+			// insert to glref logger
+			var glrefHistory models.GlrefHistory
+			glrefHistory.GLREF = glref.FCSKID
+			glrefHistory.REFPROD = refProd.FCSKID
+			glrefHistory.REFNO = glref.FCREFNO
+			glrefHistory.PRODID = v.FCSKID
+			glrefHistory.QTY = i.QTY
+			glrefHistory.IsComplete = true
+			glrefHistory.UpdateByID = fmt.Sprintf("%s", user_id)
+			if err := configs.Store.FirstOrCreate(&glrefHistory, &models.GlrefHistory{GLREF: glref.FCSKID}).Error; err != nil {
+				tx.Rollback()
+				r.Message = er.Error()
 				return c.Status(fiber.StatusInternalServerError).JSON(&r)
 			}
 			seq++
@@ -492,11 +505,11 @@ func GlrefHeaderTransferController(c *fiber.Ctx) error {
 
 	// insert to glref logger
 	var glrefHistory models.GlrefHistory
-	glrefHistory.FCSKID = glref.FCSKID
-	glrefHistory.OLDREFNO = glref.FCREFNO
+	glrefHistory.GLREF = glref.FCSKID
+	glrefHistory.REFNO = glref.FCREFNO
 	glrefHistory.IsComplete = true
 	glrefHistory.UpdateByID = fmt.Sprintf("%s", user_id)
-	if err := configs.Store.FirstOrCreate(&glrefHistory, &models.GlrefHistory{FCSKID: glref.FCSKID}).Error; err != nil {
+	if err := configs.Store.FirstOrCreate(&glrefHistory, &models.GlrefHistory{GLREF: glref.FCSKID}).Error; err != nil {
 		tx.Rollback()
 		r.Message = er.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
