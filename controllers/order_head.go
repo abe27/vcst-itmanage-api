@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strings"
+
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
@@ -30,6 +32,32 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
+		r.Data = &order
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
+	if c.Query("filterOrderNo") != "" {
+		var order []models.Orderh
+		if err := db.Scopes(services.Paginate(c)).
+			Preload("Corp").
+			Preload("Book").
+			Preload("Branch").
+			Preload("Dept").
+			Preload("Sect").
+			Preload("Job").
+			Preload("Coor").
+			Preload("CreatedBy").
+			Preload("UpdatedBy").
+			Preload("Proj").
+			Preload("DeliverTo").
+			Preload("Payterm").
+			Where("FCSTEP", c.Query("fcstep")).
+			Where("FCREFTYPE", c.Query("fcreftype")).
+			Where("FCREFNO LIKE ?", "%"+strings.ToUpper(c.Query("filterOrderNo"))+"%").
+			Find(&order, &models.Orderh{FCBOOK: c.Query("book")}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
 		r.Data = &order
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}

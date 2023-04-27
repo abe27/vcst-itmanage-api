@@ -39,11 +39,20 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
-		var isComplete int64
-		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: gl.FCSKID}).Count(&isComplete).Error; err != nil {
+		// var isComplete int64
+		// if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: gl.FCSKID}).Count(&isComplete).Error; err != nil {
+		// 	gl.FCSTATUS = false
+		// }
+		// gl.FCSTATUS = isComplete > 0
+
+		var glHistory models.GlrefHistory
+		if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: gl.FCSKID}).Error; err != nil {
 			gl.FCSTATUS = false
 		}
-		gl.FCSTATUS = isComplete > 0
+
+		txt := fmt.Sprintf("%s ==> %v\n", gl.FCSKID, glHistory.IsComplete)
+		fmt.Println(txt)
+		gl.FCSTATUS = glHistory.IsComplete
 		r.Data = &gl
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
@@ -77,11 +86,11 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		}
 
 		for _, x := range gl {
-			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			var glHistory models.GlrefHistory
+			if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: x.FCSKID}).Error; err != nil {
 				x.FCSTATUS = false
 			}
-			x.FCSTATUS = isComplete > 0
+			x.FCSTATUS = glHistory.IsComplete
 			glChecked = append(glChecked, x)
 		}
 		r.Data = &glChecked
@@ -119,11 +128,11 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		}
 
 		for _, x := range gl {
-			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			var glHistory models.GlrefHistory
+			if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: x.FCSKID}).Error; err != nil {
 				x.FCSTATUS = false
 			}
-			x.FCSTATUS = isComplete > 0
+			x.FCSTATUS = glHistory.IsComplete
 			glChecked = append(glChecked, x)
 		}
 		r.Data = &glChecked
@@ -160,11 +169,11 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		}
 
 		for _, x := range gl {
-			var isComplete int64
-			if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
+			var glHistory models.GlrefHistory
+			if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: x.FCSKID}).Error; err != nil {
 				x.FCSTATUS = false
 			}
-			x.FCSTATUS = isComplete > 0
+			x.FCSTATUS = glHistory.IsComplete
 			glChecked = append(glChecked, x)
 		}
 		r.Data = &glChecked
@@ -195,11 +204,11 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 	}
 
 	for _, x := range gl {
-		var isComplete int64
-		if err := configs.Store.Select("id").First(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.FCSKID}).Count(&isComplete).Error; err != nil {
+		var glHistory models.GlrefHistory
+		if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: x.FCSKID}).Error; err != nil {
 			x.FCSTATUS = false
 		}
-		x.FCSTATUS = isComplete > 0
+		x.FCSTATUS = glHistory.IsComplete
 		glChecked = append(glChecked, x)
 	}
 	r.Data = &glChecked
@@ -416,7 +425,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			glrefHistory.REFNO = glref.FCREFNO
 			glrefHistory.PRODID = v.FCSKID
 			glrefHistory.QTY = i.QTY
-			glrefHistory.IsComplete = true
+			glrefHistory.IsComplete = false
 			glrefHistory.UpdateByID = fmt.Sprintf("%s", user_id)
 			if err := configs.Store.FirstOrCreate(&glrefHistory, &models.GlrefHistory{GLREF: glref.FCSKID}).Error; err != nil {
 				tx.Rollback()

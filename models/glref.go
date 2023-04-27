@@ -326,9 +326,10 @@ type GlrefHistory struct {
 	GLREF        string    `gorm:"size:8;" json:"glref"`
 	REFPROD      string    `gorm:"size:8;" json:"refprod"`
 	REFNO        string    `gorm:"size:25;" json:"refno"`
+	PONO         string    `gorm:"size:20;" json:"pono"`
 	PRODID       string    `gorm:"size:8;" json:"prodid"`
 	QTY          float64   `json:"qty"`
-	IsComplete   bool      `json:"is_complete"`
+	IsComplete   bool      `json:"is_complete" default:"false"`
 	UpdateByID   string    `json:"update_by_id"`
 	UpdateByUser *User     `gorm:"foreignKey:UpdateByID;reference:ID;" json:"update_by"`
 	CreatedAt    time.Time `json:"created_at" default:"now"`

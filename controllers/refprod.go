@@ -41,11 +41,12 @@ func RefProdGetController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
-		var isCompleted int64
-		if err := configs.Store.Select("id").Find(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: refProd.Glref.FCSKID}).Count(&isCompleted).Error; err != nil {
+		var glHistory models.GlrefHistory
+		if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: refProd.Glref.FCSKID}).Error; err != nil {
 			refProd.Glref.FCSTATUS = false
 		}
-		refProd.Glref.FCSTATUS = isCompleted > 0
+
+		refProd.Glref.FCSTATUS = glHistory.IsComplete
 		r.Data = &refProd
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
@@ -80,11 +81,11 @@ func RefProdGetController(c *fiber.Ctx) error {
 		}
 
 		for _, x := range refProd {
-			var isCompleted int64
-			if err := configs.Store.Select("id").Find(&models.GlrefHistory{}, &models.GlrefHistory{GLREF: x.Glref.FCSKID}).Count(&isCompleted).Error; err != nil {
+			var glHistory models.GlrefHistory
+			if err := configs.Store.Select("is_complete").First(&glHistory, &models.GlrefHistory{GLREF: x.Glref.FCSKID}).Error; err != nil {
 				x.Glref.FCSTATUS = false
 			}
-			x.Glref.FCSTATUS = isCompleted > 0
+			x.Glref.FCSTATUS = glHistory.IsComplete
 			refProdTable = append(refProdTable, x)
 		}
 
