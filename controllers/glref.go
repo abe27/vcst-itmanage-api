@@ -225,7 +225,7 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 
 	var user models.User
 	if err := configs.Store.Select("DepartmentID").Preload("Department").First(&user, &models.User{ID: fmt.Sprintf("%s", user_id)}).Error; err != nil {
-		r.Message = fmt.Sprintf("%s %s", frm.FCWHOUSE, err.Error())
+		r.Message = fmt.Sprintf("%s %s", user_id, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
