@@ -104,6 +104,7 @@ func SetupRouter(r *fiber.App) {
 
 	glRefProd := glRef.Group("/prod")
 	glRefProd.Get("", c.RefProdGetController)
+	glRefProd.Delete("/:id", c.RefProdDeleteController)
 
 	// orderDetail := order.Group("/detail")
 	// orderDetail.Get("", c.OrderDetailGetController)

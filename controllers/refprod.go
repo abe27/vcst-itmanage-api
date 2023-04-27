@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/abe27/vcst/api.v1/configs"
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
@@ -105,5 +107,43 @@ func RefProdGetController(c *fiber.Ctx) error {
 	}
 
 	r.Data = &refProdTable
+	return c.Status(fiber.StatusOK).JSON(&r)
+}
+
+func RefProdDeleteController(c *fiber.Ctx) error {
+	db := WHSDb(c)
+	var r models.Response
+	r.Message = fmt.Sprintf("Delete %s.", c.Params("id"))
+	var refProd models.Refprod
+	if err := db.First(&refProd, &models.Refprod{FCSKID: c.Params("id")}).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+	glRefID := refProd.FCGLREF
+
+	if err := db.Delete(&refProd).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
+	}
+
+	var listProd []models.Refprod
+	if err := db.Find(&listProd, &models.Refprod{FCGLREF: glRefID}).Error; err != nil {
+		r.Message = err.Error()
+		return c.Status(fiber.StatusNotFound).JSON(&r)
+	}
+
+	if len(listProd) <= 0 {
+		var glref models.Glref
+		if err := db.First(&glref, &models.Glref{FCSKID: refProd.FCGLREF}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+
+		// Delete GLREF
+		if err := db.Delete(&glref, &models.Glref{FCSKID: refProd.FCGLREF}).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+	}
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
