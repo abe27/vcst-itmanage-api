@@ -52,6 +52,7 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 			Preload("DeliverTo").
 			Preload("Payterm").
 			Where("FCSTEP", c.Query("fcstep")).
+			Where("FCRFTYPE", c.Query("fcrftype")).
 			Where("FCREFTYPE", c.Query("fcreftype")).
 			Where("FCREFNO", strings.ToUpper(c.Query("filterOrderNo"))).
 			Find(&order, &models.Orderh{FCBOOK: c.Query("book")}).Error; err != nil {

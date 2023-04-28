@@ -167,8 +167,8 @@ type Orderh struct {
 	FNXRATE    float64   `gorm:"column:FNXRATE;" json:"fnxrate"  form:"fnxrate" `
 	FTDATETIME time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
 	// FTLASRECAL string    `gorm:"column:FTLASRECAL;" json:"ftlasrecal"  form:"ftlasrecal" `
-	// FTLASTEDIT time.Time    `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
-	FTLASTUPD time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
+	FTLASTEDIT time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	FTLASTUPD  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	// FTSRCUPD   string    `gorm:"column:FTSRCUPD;" json:"ftsrcupd"  form:"ftsrcupd" `
 	// FTSTATAPPV string    `gorm:"column:FTSTATAPPV;" json:"ftstatappv"  form:"ftstatappv" `
 	// FTXFER     string    `gorm:"column:FTXFER;" json:"ftxfer"  form:"ftxfer" `

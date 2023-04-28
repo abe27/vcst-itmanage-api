@@ -98,6 +98,7 @@ func SetupRouter(r *fiber.App) {
 	glRefHeader.Post("", c.GlrefHeaderPostController)
 	glRefHeader.Put("/:id", c.GlrefHeaderPutController)
 	glRefHeader.Delete("/:id", c.GlrefHeaderDeleteController)
+	glRefHeader.Patch("/:id", c.GlrefHeaderConfirmInvoiceController)
 
 	glTransfer := glRef.Group("/transfer")
 	glTransfer.Put("/:id", c.GlrefHeaderTransferController)

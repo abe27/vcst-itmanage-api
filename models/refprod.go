@@ -173,6 +173,8 @@ func (Refprod) TableName() string {
 func (obj *Refprod) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
 	obj.FCSKID = fmt.Sprintf("AB%s", id)
+	obj.FCDATASER = "$$$+"
+	obj.FCREFPDTYP = "P"
 	return
 }
 

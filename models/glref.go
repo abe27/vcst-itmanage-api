@@ -238,6 +238,11 @@ func (Glref) TableName() string {
 func (obj *Glref) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
 	obj.FCSKID = fmt.Sprintf("G%sF", id)
+
+	uid, _ := g.New(26)
+	obj.FCGID = uid
+	obj.FIMILLISEC = time.Now().Unix()
+	obj.FCLUPDAPP = "$0"
 	return
 }
 
@@ -321,14 +326,29 @@ type GlRefForm struct {
 	REFPROD    []FrmRefProd `json:"ref_prod" form:"ref_prod"`
 }
 
+type FrmUpdateRefProd struct {
+	FCPROD  string  `json:"fcprod"`
+	FNQTY   float64 `json:"fnqty"`
+	REFPROD string  `json:"refprod"`
+}
+
+type GlrefPatchForm struct {
+	ORDERH  string             `json:"orderh"`
+	REMARK  string             `json:"remark"`
+	REFPROD []FrmUpdateRefProd `json:"refprod"`
+}
+
 type GlrefHistory struct {
 	ID           string    `gorm:"size:21;primaryKey;not null;" json:"id"`
 	GLREF        string    `gorm:"size:8;" json:"glref"`
 	REFPROD      string    `gorm:"size:8;" json:"refprod"`
+	ORDERH       string    `gorm:"size:8;" json:"orderh"`
+	ORDERI       string    `gorm:"size:8;" json:"orderi"`
+	PRODID       string    `gorm:"size:8;" json:"prodid"`
 	REFNO        string    `gorm:"size:25;" json:"refno"`
 	PONO         string    `gorm:"size:20;" json:"pono"`
-	PRODID       string    `gorm:"size:8;" json:"prodid"`
 	QTY          float64   `json:"qty"`
+	Remark       string    `json:"remark"`
 	IsComplete   bool      `json:"is_complete" default:"false"`
 	UpdateByID   string    `json:"update_by_id"`
 	UpdateByUser *User     `gorm:"foreignKey:UpdateByID;reference:ID;" json:"update_by"`

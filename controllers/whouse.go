@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strings"
+
 	"github.com/abe27/vcst/api.v1/models"
 	"github.com/abe27/vcst/api.v1/services"
 	"github.com/gofiber/fiber/v2"
@@ -22,12 +24,23 @@ func WHouseGetController(c *fiber.Ctx) error {
 	}
 
 	var WHouse []models.WHouse
-	if err := db.Scopes(services.Paginate(c)).First(&WHouse, &models.WHouse{FCSKID: c.Query("id")}).Error; err != nil {
+	if c.Query("filterIn") != "" {
+		stringSlice := strings.Split(c.Query("filterIn"), ",")
+		if err := db.Scopes(services.Paginate(c)).Order("FCCODE").Where("FCCODE IN ?", stringSlice).Find(&WHouse).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(r)
+		}
+		r.Message = "Ok"
+		r.Data = &WHouse
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
+	if err := db.Scopes(services.Paginate(c)).Find(&WHouse).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(r)
 	}
 
-	r.Message = "ok"
+	r.Message = "Ok"
 	r.Data = &WHouse
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
