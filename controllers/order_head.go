@@ -53,7 +53,7 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 			Preload("Payterm").
 			Where("FCSTEP", c.Query("fcstep")).
 			Where("FCREFTYPE", c.Query("fcreftype")).
-			Where("FCREFNO LIKE ?", "%"+strings.ToUpper(c.Query("filterOrderNo"))+"%").
+			Where("FCREFNO", strings.ToUpper(c.Query("filterOrderNo"))).
 			Find(&order, &models.Orderh{FCBOOK: c.Query("book")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
@@ -107,7 +107,7 @@ func OrderHeadGetController(c *fiber.Ctx) error {
 		Preload("Payterm").
 		Find(&order).Error; err != nil {
 		r.Message = err.Error()
-		return c.Status(fiber.StatusNotFound).JSON(&r)
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
 	r.Data = &order

@@ -97,7 +97,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 
-	if c.Query("fcrftype") != "" {
+	if c.Query("fcreftype") != "" {
 		filterDate := time.Now().Format("2006-01-02")
 		if c.Query("fddate") != "" {
 			filterDate = c.Query("fddate")
@@ -122,7 +122,7 @@ func GlrefHeaderGetController(c *fiber.Ctx) error {
 			Preload("DeliveryToCoor").
 			Where("FNAMT > ?", 0).
 			Where("FDDATE", filterDate).
-			Find(&gl, &models.Glref{FCRFTYPE: c.Query("fcrftype")}).Error; err != nil {
+			Find(&gl, &models.Glref{FCREFTYPE: c.Query("fcreftype")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}

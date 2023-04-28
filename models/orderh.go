@@ -191,6 +191,6 @@ func (Orderh) TableName() string {
 }
 func (obj *Orderh) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
-	obj.FCSKID = fmt.Sprintf("AB%s", id)
+	obj.FCSKID = fmt.Sprintf("G%sF", id)
 	return
 }
