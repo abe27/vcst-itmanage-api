@@ -56,6 +56,23 @@ func (Notecut) TableName() string {
 
 func (obj *Notecut) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
-	obj.FCSKID = fmt.Sprintf("AB%s", id)
+	obj.FCSKID = fmt.Sprintf("G%sF", id)
+	obj.FCDATASER = "$$$+"
+	obj.FCEAFTERR = "E"
+	obj.FCLUPDAPP = "$/"
+	obj.FCMASTERTY = "PO"
+	obj.FCCHILDTYP = "PR"
+	obj.FNUMQTY = 1
+	obj.FCCREATEAP = "$/"
+	obj.FIMILLISEC = time.Now().Unix()
+	obj.FTDATETIME = time.Now() // time.Time `gorm:"column:FTDATETIME;" json:"ftdatetime"  form:"ftdatetime" default:"now"`
+	obj.FTLASTEDIT = time.Now() // time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	obj.FTLASTUPD = time.Now()  //  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
+	return
+}
+
+func (obj *Notecut) BeforeUpdate(tx *gorm.DB) (err error) {
+	obj.FTLASTEDIT = time.Now() // time.Time `gorm:"column:FTLASTEDIT;" json:"ftlastedit"  form:"ftlastedit" `
+	obj.FTLASTUPD = time.Now()  //  time.Time `gorm:"column:FTLASTUPD;" json:"ftlastupd"  form:"ftlastupd" default:"now"`
 	return
 }

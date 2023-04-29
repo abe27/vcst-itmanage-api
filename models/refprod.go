@@ -172,9 +172,18 @@ func (Refprod) TableName() string {
 
 func (obj *Refprod) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(6)
-	obj.FCSKID = fmt.Sprintf("AB%s", id)
+	obj.FCSKID = fmt.Sprintf("G%sF", id)
 	obj.FCDATASER = "$$$+"
 	obj.FCREFPDTYP = "P"
+	obj.FTDATETIME = time.Now()
+	obj.FTLASTEDIT = time.Now()
+	obj.FTLASTUPD = time.Now()
+	return
+}
+
+func (obj *Refprod) BeforeUpdate(tx *gorm.DB) (err error) {
+	obj.FTLASTEDIT = time.Now()
+	obj.FTLASTUPD = time.Now()
 	return
 }
 

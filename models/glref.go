@@ -347,7 +347,10 @@ type GlrefHistory struct {
 	PRODID       string    `gorm:"size:8;" json:"prodid"`
 	REFNO        string    `gorm:"size:25;" json:"refno"`
 	PONO         string    `gorm:"size:20;" json:"pono"`
+	PRODUCTCODE  string    `gorm:"size:25;" json:"productcode"`
+	PRODUCTNAME  string    `gorm:"size:50;" json:"productname"`
 	QTY          float64   `json:"qty"`
+	RECEIVEQTY   float64   `json:"receiveqty" default:"0"`
 	Remark       string    `json:"remark"`
 	IsComplete   bool      `json:"is_complete" default:"false"`
 	UpdateByID   string    `json:"update_by_id"`
