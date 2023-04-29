@@ -137,5 +137,4 @@ func SetupRouter(r *fiber.App) {
 	orderDetail.Post("", c.OrderDetailPostController)
 	orderDetail.Put("/:id", c.OrderDetailPutController)
 	orderDetail.Delete("/:id", c.OrderDetailDeleteController)
-
 }
