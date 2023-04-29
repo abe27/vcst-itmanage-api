@@ -555,7 +555,7 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 	var listOrderI []models.OrderiView
 	for _, p := range frm.REFPROD {
 		var prodOrderI models.OrderiView
-		if err := tx.Where("FNBACKQTY > ?", 0).First(&prodOrderI, &models.OrderiView{FCORDERH: frm.ORDERH, FCPROD: p.FCPROD}).Error; err != nil {
+		if err := tx.Where("FCSTEP", "P").First(&prodOrderI, &models.OrderiView{FCORDERH: frm.ORDERH, FCPROD: p.FCPROD}).Error; err != nil {
 			r.Message = "พบสินค้าไม่ตรงกับเอกสาร"
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
@@ -616,7 +616,7 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 
 	store := configs.Store.Begin()
 	// var sumRefProd float64 = 0
-	var sumCtn float64 = 0
+	// var sumCtn float64 = 0
 	for _, i := range listOrderI {
 		// fmt.Println("GLREF: %s PROD: %s ORDERH: %s ORDERI: %s", glRef.FCSKID, i.FCPROD, i.FCORDERH, i.FCSKID)
 		var refProd models.Refprod
@@ -640,18 +640,15 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
 
-		isCompleted := true
-		orderIQty := (i.FNBACKQTY - i.FNRECEIVEQTY)
-		orderIStatus := "P"
-		if orderIQty > 0 {
-			orderIStatus = "1"
-			isCompleted = false
+		orderIStatus := "1"
+		if i.FNQTY > (i.FNBACKQTY + i.FNRECEIVEQTY) {
+			orderIStatus = "P"
 		}
 
 		// UPDATE ORDERI
 		if err := tx.Model(&models.Orderi{FCSKID: i.FCSKID}).Updates(&models.Orderi{
 			FCSTEP:     orderIStatus,
-			FNBACKQTY:  orderIQty,
+			FNBACKQTY:  i.FNBACKQTY + i.FNRECEIVEQTY,
 			FTLASTEDIT: time.Now(),
 			FTLASTUPD:  time.Now(),
 		}).Error; err != nil {
@@ -659,8 +656,8 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
-		fmt.Println("orderIStatus: ", orderIStatus)
-		sumCtn += orderIQty
+		// fmt.Println("orderIStatus: ", orderIStatus)
+		// sumCtn += orderIQty
 
 		// UPDATE GLREF HISTORY
 		var orderH models.Orderh
@@ -727,7 +724,7 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 		glHistory.ORDERI = i.FCSKID
 		glHistory.PONO = strings.ReplaceAll(orderH.FCREFNO, " ", "")
 		glHistory.RECEIVEQTY = i.FNRECEIVEQTY
-		glHistory.IsComplete = isCompleted
+		glHistory.IsComplete = true
 
 		if err := store.Save(&glHistory).Error; err != nil {
 			tx.Rollback()
@@ -737,20 +734,26 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 		}
 	}
 
-	fmt.Println("sumCtn: ", sumCtn)
-	// UPDATE ORDERH
-	orderStatus := "P"
-	if sumCtn > 0 {
-		orderStatus = "1"
+	var sumCtn int64
+	if err := tx.Raw(fmt.Sprintf("select count(FCSKID) from ORDERI where FCORDERH='%s' and FNQTY > FNBACKQTY", listOrderI[0].FCORDERH)).Scan(&sumCtn).Error; err != nil {
+		tx.Rollback()
+		store.Rollback()
+		r.Message = err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
-
+	// UPDATE ORDERH
+	orderStatus := "1"
+	if sumCtn > 0 {
+		orderStatus = "P"
+	}
+	// fmt.Println("ORDERID: ", listOrderI[0].FCORDERH, " SUM: ", sumCtn, "STATUS: ", orderStatus)
 	if err := tx.Model(&models.Orderh{FCSKID: listOrderI[0].FCORDERH}).Updates(&models.Orderh{
 		FCSTEP:     orderStatus,
 		FTLASTEDIT: time.Now(),
 		FTLASTUPD:  time.Now(),
 	}).Error; err != nil {
 		tx.Rollback()
-		store.Commit()
+		store.Rollback()
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
