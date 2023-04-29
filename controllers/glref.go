@@ -620,7 +620,7 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 	for _, i := range listOrderI {
 		// fmt.Println("GLREF: %s PROD: %s ORDERH: %s ORDERI: %s", glRef.FCSKID, i.FCPROD, i.FCORDERH, i.FCSKID)
 		var refProd models.Refprod
-		if err := tx.Select("FCSKID,FNQTY").First(&refProd, &models.Refprod{FCGLREF: glRef.FCSKID, FCPROD: i.FCPROD}).Error; err != nil {
+		if err := tx.Select("FCSKID,FNQTY,FCSEQ").First(&refProd, &models.Refprod{FCGLREF: glRef.FCSKID, FCPROD: i.FCPROD}).Error; err != nil {
 			tx.Rollback()
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
