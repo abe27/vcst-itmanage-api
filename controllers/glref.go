@@ -679,11 +679,11 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusNotFound).JSON(&r)
 		}
 
-		var seqGl int64
-		if err := tx.Find(&models.Gl{}, &models.Gl{FCGLHEAD: glRef.FCGLHEAD}).Count(&seqGl).Error; err != nil {
-			r.Message = err.Error()
-			return c.Status(fiber.StatusInternalServerError).JSON(&r)
-		}
+		// var seqGl int64
+		// if err := tx.Find(&models.Gl{}, &models.Gl{FCGLHEAD: glRef.FCGLHEAD}).Count(&seqGl).Error; err != nil {
+		// 	r.Message = err.Error()
+		// 	return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		// }
 
 		gl.FCACCHART = accChart.FCSKID
 		gl.FCBRANCH = glRef.FCBRANCH
@@ -691,7 +691,7 @@ func GlrefHeaderConfirmInvoiceController(c *fiber.Ctx) error {
 		gl.FCSECT = glRef.FCSECT
 		gl.FCDEPT = glRef.FCDEPT
 		gl.FCGLHEAD = glRef.FCGLHEAD
-		gl.FCSEQ = fmt.Sprintf("%03d", seqGl+1)
+		gl.FCSEQ = refProd.FCSEQ
 		gl.FDDATE = glRef.FDDATE
 		gl.FNAMT = i.FNRECEIVEQTY
 		if err := tx.Create(&gl).Error; err != nil {
