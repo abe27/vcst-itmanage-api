@@ -67,6 +67,10 @@ func SetupRouter(r *fiber.App) {
 	document.Put("/:id", c.DocumentPutController)
 	document.Delete("/:id", c.DocumentDeleteController)
 
+	// Route Formula
+	routeFormula := auth.Group("/formula")
+	routeFormula.Get("/section", c.FormulaSectionGetController)
+
 	// Route product
 	prod := auth.Group("/product")
 	prod.Get("", c.ProductGetController)
