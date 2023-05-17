@@ -19,7 +19,7 @@ func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
 		case pageSize > 100:
 			pageSize = 100
 		case pageSize <= 0:
-			pageSize = 20
+			pageSize = 10
 		}
 
 		offset := (page - 1) * pageSize

@@ -191,4 +191,5 @@ type FrmRefProd struct {
 	FCCODE string  `json:"fccode" form:"fccode"`
 	PACK   int64   `json:"pack" form:"pack"`
 	QTY    float64 `json:"qty" form:"qty"`
+	UMID   string  `json:"unit" form:"unit"`
 }

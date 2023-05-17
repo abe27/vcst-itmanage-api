@@ -240,8 +240,13 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	db := WHSDb(c)
 	// Begin transaction
 	tx := db.Begin()
+	// var sec models.Sect
+	// if err := tx.First(&sec, &models.Sect{FCDEPT: user.Department.Code}).Error; err != nil {
+	// 	r.Message = fmt.Sprintf("%s %s", user.Department.Code, err.Error())
+	// 	return c.Status(fiber.StatusNotFound).JSON(&r)
+	// }
 	var sec models.Sect
-	if err := tx.First(&sec, &models.Sect{FCDEPT: user.Department.Code}).Error; err != nil {
+	if err := tx.First(&sec, &models.Sect{FCSKID: frm.FCSEC}).Error; err != nil {
 		r.Message = fmt.Sprintf("%s %s", user.Department.Code, err.Error())
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -366,12 +371,16 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 			refProd.FCDEPT = sec.FCDEPT
 			refProd.FCPROD = v.FCSKID
 			refProd.FCPRODTYPE = v.FCPRTYPE
-			refProd.FCUM = v.FCUM
-			refProd.FCUMSTD = v.FCUM
 			refProd.FNUMQTY = float64(i.PACK)
 			refProd.FNQTY = i.QTY
-			refProd.FCSTUM = v.FCUM
-			refProd.FCSTUMSTD = v.FCUM
+			// refProd.FCUM = v.FCUM
+			// refProd.FCUMSTD = v.FCUM
+			// refProd.FCSTUM = v.FCUM
+			// refProd.FCSTUMSTD = v.FCUM
+			refProd.FCUM = i.UMID
+			refProd.FCUMSTD = i.UMID
+			refProd.FCSTUM = i.UMID
+			refProd.FCSTUMSTD = i.UMID
 			refProd.FNSTUMQTY = float64(i.PACK)
 			refProd.FTDATETIME = time.Now()
 			refProd.FTLASTEDIT = time.Now()

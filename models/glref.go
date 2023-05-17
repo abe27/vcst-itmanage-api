@@ -319,6 +319,7 @@ type GlRefForm struct {
 	FCREFTYPE  string       `json:"fcreftype"  form:"fcreftype" `
 	FCRFTYPE   string       `json:"fcrftype"  form:"fcrftype" `
 	FCSTEP     string       `json:"fcstep"  form:"fcstep" default:"I"`
+	FCSEC      string       `json:"fcsec" form:"fcsec"`
 	FCREMARK   string       `json:"fcremark" form:"fcremark"`
 	FDDATE     time.Time    `json:"fddate"  form:"fddate" default:"now"`
 	FNAFTDEP   float64      `json:"fnaftdep"  form:"fnaftdep" defualt:"0"`
