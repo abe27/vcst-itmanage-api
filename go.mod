@@ -17,7 +17,7 @@ require (
 	github.com/jackc/pgx/v5 v5.3.1 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.18 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/microsoft/go-mssqldb v0.21.0 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
@@ -33,12 +33,12 @@ require (
 )
 
 require (
-	github.com/gofiber/fiber/v2 v2.45.0
+	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1
 	github.com/matoous/go-nanoid/v2 v2.0.0
-	gorm.io/driver/postgres v1.5.0
-	gorm.io/driver/sqlserver v1.4.3
+	gorm.io/driver/postgres v1.5.2
+	gorm.io/driver/sqlserver v1.5.0
 )
