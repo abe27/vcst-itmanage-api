@@ -306,17 +306,25 @@ func GlrefHeaderPostController(c *fiber.Ctx) error {
 	}
 	glref.FCFRWHOUSE = glWhs.FCSKID
 
-	if strings.ReplaceAll(book.FCWHOUSE, " ", "") != "" {
-		glref.FCTOWHOUSE = book.FCWHOUSE
-	} else {
-		var glToWhs models.WHouse
-		if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: frm.TOWHOUSE}).Error; err != nil {
-			tx.Rollback()
-			r.Message = fmt.Sprintf("Not Found %s := %s", frm.TOWHOUSE, err.Error())
-			return c.Status(fiber.StatusNotFound).JSON(&r)
-		}
-		glref.FCTOWHOUSE = glToWhs.FCSKID
+	// if strings.ReplaceAll(book.FCWHOUSE, " ", "") != "" {
+	// 	glref.FCTOWHOUSE = book.FCWHOUSE
+	// } else {
+	// 	var glToWhs models.WHouse
+	// 	if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: frm.TOWHOUSE}).Error; err != nil {
+	// 		tx.Rollback()
+	// 		r.Message = fmt.Sprintf("Not Found %s := %s", frm.TOWHOUSE, err.Error())
+	// 		return c.Status(fiber.StatusNotFound).JSON(&r)
+	// 	}
+	// 	glref.FCTOWHOUSE = glToWhs.FCSKID
+	// }
+
+	var glToWhs models.WHouse
+	if err := tx.Select("FCSKID").First(&glToWhs, &models.WHouse{FCCODE: frm.TOWHOUSE}).Error; err != nil {
+		tx.Rollback()
+		r.Message = fmt.Sprintf("Not Found %s := %s", frm.TOWHOUSE, err.Error())
+		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
+	glref.FCTOWHOUSE = glToWhs.FCSKID
 
 	if frm.FCREMARK != "" {
 		// glref.FMMEMDATA = fmt.Sprintf("Rem%sRem", frm.FCREMARK)
